@@ -152,7 +152,7 @@ EXT <- 2
 
 # perform polygon overlay operations and compute computational grid
 
-polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = 1000, ext = EXT)
+polyolay <- getpolyol(data = pop18, regionalcovariates = pop18, cellwidth = 1000, ext = EXT)
 #polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
 
 ## MODEL FORMULAE
@@ -163,16 +163,16 @@ FORM_Temporal <- t ~ dotw -1
 
 # set the interpolation type for each variable
 
-popDen18_sf@data <- guessinterp(popDen18_sf@data)
-popDen18_sf@data <- assigninterp(df = popDen18_sf@data, vars =  c( "EA_NUMBER","den18","Total_0_10","area18"), value = "ArealWeightedMean")
-class(popDen18_sf@data$Total_0_10)
+pop18@data <- guessinterp(pop18@data)
+pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18"), value = "ArealWeightedMean")
+class(pop18@data$den18)
 
 ## DESIGN MATRIX
 #pop3 <- setClass(pop3, slots = c(Total_0.10 = "numeric", geometry = "numeric"))
 #popDen18_ <- as_Spatial(popDen18_) # changing class type of the object to S4
 #xyt <- as_Spatial(xyt)
 #Zmat <- getZmat(formula = FORM, data = xyt, regionalcovariates = popDen18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
-Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = popDen18_sf, cellwidth = CellWidth, ext = EXT, overl = polyolay)
+Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
 plot(Zmat)
 #Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
 
@@ -180,8 +180,8 @@ plot(Zmat)
 # so that number of cases to be proportional to population at risk
 # and not the exponential of population
 
-Zmat[, "Total_0_10"] <- log(Zmat[,"Total_0_10"])
-Zmat[, "Total_0_10"][is.infinite(Zmat[, "Total_0_10"])] <- min(Zmat[, "Total_0_10"][!is.infinite(Zmat[, "Total_0_10"])]) 
+Zmat[, "den18"] <- log(Zmat[,"den18"])
+Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
 #plot(Zmat)
 
 # DEFINING THE OFFSET
