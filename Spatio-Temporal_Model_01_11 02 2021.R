@@ -67,8 +67,8 @@ xy_utm
 plot(xy_utm)
 
 # Defining the time object which will be used for modelling
-Time_lim <- c(16522,17165) # first and last value for object t
-Time_lim <- as.integer(Time_lim)
+Time_lim <- as.integer(c(16522,17165)) # first and last value for object t
+#Time_lim <- as.integer(Time_lim)
 
 ## population density for Blantyre (2018)
 pop18 <- st_read("Blantyre_City.shp") # from NSO; shape file
@@ -80,17 +80,17 @@ pop18 <- left_join(pop18, EA_2018, by = c("ADM_NAME" = "ADM_NAME", "EA_NUMBER" =
 # Removing NAs
 
 pop18$Total_0.10[is.na(pop18$Total_0.10) & pop18$ADM_TYPE == "PA"] <- 0
-pop18$den18[is.na(pop18$den18) & pop18$ADM_TYPE == "PA"] <- 0
+#pop18$den18[is.na(pop18$den18) & pop18$ADM_TYPE == "PA"] <- 0
 
 # Calculating population density
 pop18 <- pop18 %>%
   mutate(area18=units::set_units(st_area(geometry),value="km^2")) %>%
   mutate(den18=Total_0.10/area18)
+
 # Plotting the shapefile
-pop18_Totals_sf <- dplyr::select(pop18,Total_0.10)
-pop18_Den_sf <- dplyr::select(pop18,den18)
-plot(pop18_Totals_sf, breaks=c(0,10,50,100,150,200,250,300,400, 500,1000,2000))
-plot(pop18_Den_sf, breaks=c(0,10,50,100,500,1000,2000,3000,5000,1e4,5e4))
+
+plot(pop18["Total_0.10"], breaks=c(0,10,50,100,150,200,250,300,400,600,800,1000))
+plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4))
 
 # convert to SpatialPolygonsDataFrame
 pop18<-as_Spatial(pop18)
@@ -313,4 +313,3 @@ plot(kin)
 #Estimating temporal correlation parameter theta
 
 #theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
-
