@@ -43,12 +43,6 @@ library(units)
 library(udunits2)
 library(fasterize)
 
-###############
-## READ DATA ##
-###############
-
-## typhoid incident case data
-
 dat<-read.csv("Model_01_Data.csv") %>% # 540 cases
   dplyr::select(hh_LAT, hh_LNG, sample_collected) %>%
   filter(!is.na(hh_LAT)) #removing records with missing GPS coordinates
@@ -62,7 +56,7 @@ t <- dat$sample_collected
 
 # Converting coordinates to utm
 xy <- SpatialPoints(cbind(x,y), proj4string=CRS("+proj=longlat"))
-xy_utm <-spTransform(xy, CRS("+proj=utm +zone=36S"))
+xy_utm <-spTransform(xy, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84"))
 xy_utm
 plot(xy_utm)
 
@@ -72,6 +66,8 @@ Time_lim <- as.integer(c(16522,17165)) # first and last value for object t
 
 ## population density for Blantyre (2018)
 pop18 <- st_read("Blantyre_City.shp") # from NSO; shape file
+pop18<-st_transform(pop18, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
+
 EA_2018 <- read.csv("popEA_NSO_2018_BTCity_final.csv") # census data
 
 pop18$EA_NUMBER <- as.integer(pop18$EA_NUMBER)
@@ -97,9 +93,8 @@ pop18<-as_Spatial(pop18)
 
 # Owin object preparation for Blantyre City
 BTShapeF <- st_read("MWI_BlantyreCity.shp")
-BTShapeF <- st_transform(BTShapeF, crs(xy_utm))
-#BTShapeF <- gSimplify(BTShapeF$geometry,tol=0.02, topologyPreserve=TRUE)
-#BTShapeF <- st_crs(pop18)
+BTShapeF <- st_transform(BTShapeF, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
+
 BTShapeF
 BTShapeF <- st_union(BTShapeF)
 class(BTShapeF)
@@ -152,7 +147,7 @@ EXT <- 2
 
 # perform polygon overlay operations and compute computational grid
 
-polyolay <- getpolyol(data = pop18, regionalcovariates = pop18, cellwidth = 1000, ext = EXT)
+polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT)
 #polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
 
 ## MODEL FORMULAE
@@ -213,7 +208,7 @@ ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = tim, lag
 ## DEFINING PRIORS
 
 # Defining priors
-EtaP <- PriorSpec(LogGaussianPrior(mean = c(1,2000,1), variance = diag(0.2,3)))
+EtaP <- PriorSpec(LogGaussianPrior(mean = c(1,2000), variance = diag(0.2,3)))
 BetaP <- PriorSpec(GaussianPrior(mean = c(0,9), variance = diag(1e+06, 9)))
 priors <- lgcpPrior(etaprior = EtaP, betaprior = BetaP)
 
@@ -229,17 +224,17 @@ CF <- CovFunction(exponentialCovFct)
 # run the MCMC algorithm
 
 DIRNAME <- getwd()
-SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, 
-      T = tim, laglength = LAGLENGTH, poisson.offset = Pop.offset, ZmatList = ZmatList, model.priors = priors, 
-      model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, 
-      mcmc.control = mcmcpars(mala.length = 1000, burnin = 100, 
-      retain = 9, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
-      targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME, 
-      "ST_Model_01"), forceSave = TRUE)), ext = EXT)
+
+SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
+                             model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, 
+                             mcmc.control = mcmcpars(mala.length = 1000, burnin = 100, 
+                             retain = 9, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
+                             targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
+                             forceSave = TRUE)), ext = EXT) 
 
 save(list = ls(), file = file.path(DIRNAME, "ST_Model_01", "ST_Model_01_output.RData")) 
 
-# Model parameter estimation using MCMC (MALA Algorithm)
+# Model parameter estimation using MCMC(MALA Algorithm)
 #tempsave <- getwd()
 #SpatioTemporal_Model_01 <- lgcpPredict(xyt = xyt, T = 16600, laglength = 2, model.parameters = lgcppars(sigma = 2, phi = 3, theta = 4.6), cellwidth = 175, spatial.intensity = Spatrisk, temporal.intensity = mu_t, mcmc.control = mcmcpars(mala.length = 120000, burnin = 20000, retain = 100, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, targetacceptance = 0.574)),output.control = setoutput(gridfunction = NULL , gridmeans = NULL))
 #SpatioTemporal_Model_01 <- lgcpPredict(xyt = xyt, T = 16600, laglength = 2, model.parameters = lgcppars(sigma = 2, phi = 3, theta = 4.6), cellwidth = 175, spatial.intensity = Spatrisk, temporal.intensity = mu_t, mcmc.control = mcmcpars(mala.length = 1000, burnin = 200, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(tempsave,"spatio-temporal_01"), forceSave = TRUE)))
