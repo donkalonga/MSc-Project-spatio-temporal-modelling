@@ -123,7 +123,7 @@ plot(xyt)
 # MINIMUM CONTRAST ESTIMATION (spatial intensity)
 
 minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
-chooseCellwidth(xyt,cwinit = 175) # cell width is 175 metres
+chooseCellwidth(xyt,cwinit = 200) # cell width is 175 metres
 
 # Plotting the spatial density function
 denty <- lambdaEst(xyt, axes=T)
@@ -142,8 +142,8 @@ plot(mu_t)
 
 # Selecting cell width and extension
 
-CellWidth <- 175
-EXT <- 2
+CellWidth <- 200
+EXT <- 3
 
 # perform polygon overlay operations and compute computational grid
 
@@ -152,7 +152,7 @@ polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = CellWi
 
 ## MODEL FORMULAE
 
-FORM <- X ~ den18 + dotw
+FORM <- X ~   den18 + dotw
 FORM_Spatial <- X ~ den18
 FORM_Temporal <- t ~ dotw -1
 
@@ -177,7 +177,7 @@ plot(Zmat)
 
 Zmat[, "den18"] <- log(Zmat[,"den18"])
 Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
-#plot(Zmat)
+plot(Zmat)
 
 # DEFINING THE OFFSET
 
@@ -199,7 +199,7 @@ tdata <- data.frame(t = tvec, dotw = da)
 
 tim <- 16844
 tim <- as.integer(tim)
-LAGLENGTH <- 13
+LAGLENGTH <- 31
 LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
@@ -208,8 +208,8 @@ ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = tim, lag
 ## DEFINING PRIORS
 
 # Defining priors
-EtaP <- PriorSpec(LogGaussianPrior(mean = c(1,2000), variance = diag(0.2,3)))
-BetaP <- PriorSpec(GaussianPrior(mean = c(0,9), variance = diag(1e+06, 9)))
+EtaP <- PriorSpec(LogGaussianPrior(mean = log(c(1,2000,1)), variance = diag(0.2,3)))
+BetaP <- PriorSpec(GaussianPrior(mean = rep(0,8), variance = diag(1e+06, 8)))
 priors <- lgcpPrior(etaprior = EtaP, betaprior = BetaP)
 
 # set initial values for the algorithm
@@ -227,23 +227,19 @@ DIRNAME <- getwd()
 
 SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
                              model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, 
-                             mcmc.control = mcmcpars(mala.length = 1000, burnin = 100, 
-                             retain = 9, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
+                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 500, 
+                             retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
                              forceSave = TRUE)), ext = EXT) 
 
-save(list = ls(), file = file.path(DIRNAME, "ST_Model_01", "ST_Model_01_output.RData")) 
-
-# Model parameter estimation using MCMC(MALA Algorithm)
-#tempsave <- getwd()
-#SpatioTemporal_Model_01 <- lgcpPredict(xyt = xyt, T = 16600, laglength = 2, model.parameters = lgcppars(sigma = 2, phi = 3, theta = 4.6), cellwidth = 175, spatial.intensity = Spatrisk, temporal.intensity = mu_t, mcmc.control = mcmcpars(mala.length = 120000, burnin = 20000, retain = 100, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, targetacceptance = 0.574)),output.control = setoutput(gridfunction = NULL , gridmeans = NULL))
-#SpatioTemporal_Model_01 <- lgcpPredict(xyt = xyt, T = 16600, laglength = 2, model.parameters = lgcppars(sigma = 2, phi = 3, theta = 4.6), cellwidth = 175, spatial.intensity = Spatrisk, temporal.intensity = mu_t, mcmc.control = mcmcpars(mala.length = 1000, burnin = 200, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(tempsave,"spatio-temporal_01"), forceSave = TRUE)))
-#save(list = ls(), file = file.path(tempsave, "spatio-temporal_01", "spatio-temporal_01.RData"))
-SpatioTemporal_Model_01
-
+ save(list = ls(), file = file.path(DIRNAME, "ST_Model_01", "ST_Model_01_output.RData")) 
+ 
 # MODEL DIAGNOSTIC CHECKS by plotting the log target to check if the chain has converged to a posterior mode
 
+plot(SpatioTemporal_Model_01)
 plot(ltar(SpatioTemporal_Model_01), type = "s", xlab = "Iteration/900", ylab = "log target")
+
+#plot(hvals(SpatioTemporal_Model_01)[2000:5000], type = "l", xlab = "Iteration", ylab = "h")
 
 # compute and plot autocorrelations in the latent field
 lagch <- c(1, 5, 15)
