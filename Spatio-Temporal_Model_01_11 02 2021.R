@@ -88,6 +88,10 @@ pop18 <- pop18 %>%
 plot(pop18["Total_0.10"], breaks=c(0,10,50,100,150,200,250,300,400,600,800,1000))
 plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4))
 
+# Defining Pop Offset Object
+
+pop18 <- pop18 %>% mutate(pop.count=den18*0.04)
+
 # convert to SpatialPolygonsDataFrame
 pop18<-as_Spatial(pop18)
 
@@ -147,27 +151,27 @@ EXT <- 3
 
 # perform polygon overlay operations and compute computational grid
 
-polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT)
+polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = 1000, ext = EXT)
 #polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
 
 ## MODEL FORMULAE
 
-FORM <- X ~   den18 + dotw
-FORM_Spatial <- X ~ den18
+FORM <- X ~ dotw
+FORM_Spatial <- X ~ pop.count -1
 FORM_Temporal <- t ~ dotw -1
 
 # set the interpolation type for each variable
 
 pop18@data <- guessinterp(pop18@data)
-pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18"), value = "ArealWeightedMean")
-class(pop18@data$den18)
+pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop.count"), value = "ArealWeightedMean")
+class(pop18@data$pop.count)
 
 ## DESIGN MATRIX
 #pop3 <- setClass(pop3, slots = c(Total_0.10 = "numeric", geometry = "numeric"))
 #popDen18_ <- as_Spatial(popDen18_) # changing class type of the object to S4
 #xyt <- as_Spatial(xyt)
 #Zmat <- getZmat(formula = FORM, data = xyt, regionalcovariates = popDen18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
-Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
+Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = 1000, ext = EXT, overl = polyolay)
 plot(Zmat)
 #Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
 
@@ -175,9 +179,9 @@ plot(Zmat)
 # so that number of cases to be proportional to population at risk
 # and not the exponential of population
 
-Zmat[, "den18"] <- log(Zmat[,"den18"])
-Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
-plot(Zmat)
+#Zmat[, "den18"] <- log(Zmat[,"den18"])
+#Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
+#plot(Zmat)
 
 # DEFINING THE OFFSET
 
@@ -225,9 +229,9 @@ CF <- CovFunction(exponentialCovFct)
 
 DIRNAME <- getwd()
 
-SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
-                             model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, 
-                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 500, 
+SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, poisson.offset = Pop.offset, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
+                             model.inits = INITS, spatial.covmodel = CF, cellwidth = 1000, 
+                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, 
                              retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
                              forceSave = TRUE)), ext = EXT) 
@@ -304,3 +308,4 @@ plot(kin)
 #Estimating temporal correlation parameter theta
 
 #theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
+
