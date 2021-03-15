@@ -88,9 +88,16 @@ pop18 <- pop18 %>%
 plot(pop18["Total_0.10"], breaks=c(0,10,50,100,150,200,250,300,400,600,800,1000))
 plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4))
 
-# Defining Pop Offset Object
+###########################################
+## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
+###########################################
 
-pop18 <- pop18 %>% mutate(pop.count=den18*0.04)
+minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
+chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
+
+CellWidth <- 1000 # Change this value to change computational grid size
+EXT <- 3 # to be used during polygon overlay
+pop18 <- pop18 %>% mutate(pop.count=(den18*CellWidth^2)/1e6)
 
 # convert to SpatialPolygonsDataFrame
 pop18<-as_Spatial(pop18)
@@ -124,11 +131,6 @@ plot(xyt)
 # properties of Y
 # It is also used to inform the proposal kernel for the MCMC algorithm
 
-# MINIMUM CONTRAST ESTIMATION (spatial intensity)
-
-minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
-chooseCellwidth(xyt,cwinit = 200) # cell width is 175 metres
-
 # Plotting the spatial density function
 denty <- lambdaEst(xyt, axes=T)
 plot(denty)
@@ -144,21 +146,16 @@ mu_t <- muEst(xyt, f=1/20) # f is the lowess argument for smoothing
 mu_t # temporalAtRisk object
 plot(mu_t)
 
-# Selecting cell width and extension
-
-CellWidth <- 200
-EXT <- 3
-
 # perform polygon overlay operations and compute computational grid
 
-polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = 1000, ext = EXT)
+polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT)
 #polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
 
 ## MODEL FORMULAE
 
-FORM <- X ~ dotw
+FORM <- X ~ moty
 FORM_Spatial <- X ~ pop.count -1
-FORM_Temporal <- t ~ dotw -1
+FORM_Temporal <- t ~ moty -1
 
 # set the interpolation type for each variable
 
@@ -171,7 +168,7 @@ class(pop18@data$pop.count)
 #popDen18_ <- as_Spatial(popDen18_) # changing class type of the object to S4
 #xyt <- as_Spatial(xyt)
 #Zmat <- getZmat(formula = FORM, data = xyt, regionalcovariates = popDen18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
-Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = 1000, ext = EXT, overl = polyolay)
+Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
 plot(Zmat)
 #Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
 
@@ -191,19 +188,24 @@ Pop.offset <- spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"
 
 # plot the spatial interpolated covariates
 
-plot(Zmat, ask = F)
+plot(Zmat, ask = F) 
 
 # construct dummy temporal data frame
-days <- c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+#days <- c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+#tvec <- xyt$tlim[1]:xyt$tlim[2]
+#da <- rep(days, length.out = length(tvec))
+#tdata <- data.frame(t = tvec, dotw = da)
+
+months.of.year <- c("March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "January", "February")
 tvec <- xyt$tlim[1]:xyt$tlim[2]
-da <- rep(days, length.out = length(tvec))
-tdata <- data.frame(t = tvec, dotw = da)
+ma <- rep(months.of.year, length.out = length(tvec+30))
+tdata <- data.frame(t = tvec, moty = ma)
 
 # choose last time point and number of proceeding time-points to include
 
 tim <- 16844
 tim <- as.integer(tim)
-LAGLENGTH <- 31
+LAGLENGTH <- 8
 LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
@@ -213,7 +215,7 @@ ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = tim, lag
 
 # Defining priors
 EtaP <- PriorSpec(LogGaussianPrior(mean = log(c(1,2000,1)), variance = diag(0.2,3)))
-BetaP <- PriorSpec(GaussianPrior(mean = rep(0,8), variance = diag(1e+06, 8)))
+BetaP <- PriorSpec(GaussianPrior(mean = rep(0,13), variance = diag(1e+06, 13)))
 priors <- lgcpPrior(etaprior = EtaP, betaprior = BetaP)
 
 # set initial values for the algorithm
@@ -229,12 +231,11 @@ CF <- CovFunction(exponentialCovFct)
 
 DIRNAME <- getwd()
 
-SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, poisson.offset = Pop.offset, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
-                             model.inits = INITS, spatial.covmodel = CF, cellwidth = 1000, 
-                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, 
-                             retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
+SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
+                             model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, poisson.offset =  Pop.offset, 
+                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
-                             forceSave = TRUE)), ext = EXT) 
+                             forceSave = TRUE)), gradtrunc = Inf, ext = EXT) 
 
  save(list = ls(), file = file.path(DIRNAME, "ST_Model_01", "ST_Model_01_output.RData")) 
  
@@ -286,7 +287,7 @@ plotExceed(ex[[1]], "ep", SpatioTemporal_Model_01, zlim = c(0, 1), asp = 1, axes
            sub = "", ask = FALSE)
 scalebar(5000, label = "5 km")
 
-# conditional probabilities
+ # conditional probabilities
 cp <- condProbs(SpatioTemporal_Model_01)
 
 # segregation probabilities
@@ -308,4 +309,3 @@ plot(kin)
 #Estimating temporal correlation parameter theta
 
 #theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
-
