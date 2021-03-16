@@ -88,20 +88,6 @@ pop18 <- pop18 %>%
 plot(pop18["Total_0.10"], breaks=c(0,10,50,100,150,200,250,300,400,600,800,1000))
 plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4))
 
-###########################################
-## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
-###########################################
-
-minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
-chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
-
-CellWidth <- 1000 # Change this value to change computational grid size
-EXT <- 3 # to be used during polygon overlay
-pop18 <- pop18 %>% mutate(pop.count=(den18*CellWidth^2)/1e6)
-
-# convert to SpatialPolygonsDataFrame
-pop18<-as_Spatial(pop18)
-
 # Owin object preparation for Blantyre City
 BTShapeF <- st_read("MWI_BlantyreCity.shp")
 BTShapeF <- st_transform(BTShapeF, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
@@ -145,6 +131,20 @@ xyt$t <- as.integer(xyt$t)
 mu_t <- muEst(xyt, f=1/20) # f is the lowess argument for smoothing
 mu_t # temporalAtRisk object
 plot(mu_t)
+
+###########################################
+## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
+###########################################
+
+minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
+chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
+
+CellWidth <- 1000 # Change this value to change computational grid size
+EXT <- 3 # to be used during polygon overlay
+pop18 <- pop18 %>% mutate(pop.count=(den18*CellWidth^2)/1e6)
+
+# convert to SpatialPolygonsDataFrame
+pop18<-as_Spatial(pop18)
 
 # perform polygon overlay operations and compute computational grid
 
@@ -309,3 +309,4 @@ plot(kin)
 #Estimating temporal correlation parameter theta
 
 #theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
+
