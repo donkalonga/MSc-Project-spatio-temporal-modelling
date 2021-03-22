@@ -180,11 +180,20 @@ plot(Zmat)
 #Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
 #plot(Zmat)
 
+# choose last time point and number of proceeding time-points to include
+
+tim <- 17165
+tim <- as.integer(tim)
+LAGLENGTH <- 25
+LAGLENGTH <- as.integer(LAGLENGTH)
+
 # DEFINING THE OFFSET
 
 mm <- length(attr(Zmat, "mcens"))
 nn <- length(attr(Zmat, "ncens"))
+
 Pop.offset <- spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn)))
+Pop.offset <- rep(Pop.offset, LAGLENGTH + 1)
 
 # plot the spatial interpolated covariates
 
@@ -201,12 +210,6 @@ tvec <- xyt$tlim[1]:xyt$tlim[2]
 ma <- rep(months.of.year, length.out = length(tvec+30))
 tdata <- data.frame(t = tvec, moty = ma)
 
-# choose last time point and number of proceeding time-points to include
-
-tim <- 16844
-tim <- as.integer(tim)
-LAGLENGTH <- 8
-LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
 ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = tim, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
@@ -235,7 +238,7 @@ SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt
                              model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, poisson.offset =  Pop.offset, 
                              mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
-                             forceSave = TRUE)), gradtrunc = Inf, ext = EXT) 
+                             forceSave = TRUE)), ext = EXT) 
 
  save(list = ls(), file = file.path(DIRNAME, "ST_Model_01", "ST_Model_01_output.RData")) 
  
@@ -309,4 +312,3 @@ plot(kin)
 #Estimating temporal correlation parameter theta
 
 #theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
-
