@@ -46,13 +46,14 @@ library(fasterize)
 dat<-read.csv("Model_01_Data.csv") %>% # 540 cases
   dplyr::select(hh_LAT, hh_LNG, sample_collected) %>%
   filter(!is.na(hh_LAT)) #removing records with missing GPS coordinates
-
+#dat <- read.csv("ST_All-Linege_Data.csv")
 dim(dat) # 310 cases
 
 # Converting dataset into a space-time planar point pattern object
 x <- dat$hh_LNG
 y <- dat$hh_LAT
 t <- dat$sample_collected
+tm <- as.Date(t,origin="1970-01-01")
 
 # Converting coordinates to utm
 xy <- SpatialPoints(cbind(x,y), proj4string=CRS("+proj=longlat"))
@@ -61,8 +62,9 @@ xy_utm
 plot(xy_utm)
 
 # Defining the time object which will be used for modelling
-Time_lim <- as.integer(c(16522,17165)) # first and last value for object t
-#Time_lim <- as.integer(Time_lim)
+
+Time_lim <- as.integer(c(16522,17155)) # first and last value for object t
+#Time_lim <- as.integer(1,310)
 
 ## population density for Blantyre (2018)
 pop18 <- st_read("Blantyre_City.shp") # from NSO; shape file
@@ -136,40 +138,60 @@ plot(mu_t)
 ## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
 ###########################################
 
+CellWidth <- 1000 # Change this value to change computational grid size
+EXT <- 3 # to be used during polygon overlay
 minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
 chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
 
-CellWidth <- 1000 # Change this value to change computational grid size
-EXT <- 3 # to be used during polygon overlay
-pop18 <- pop18 %>% mutate(pop.count=(den18*CellWidth^2)/1e6)
+#pop18 <- pop18 %>% mutate(pop.count=(den18*CellWidth^2)/1e6)
 
 # convert to SpatialPolygonsDataFrame
-pop18<-as_Spatial(pop18)
+pop18_SP<-as_Spatial(pop18)
 
 # perform polygon overlay operations and compute computational grid
 
-polyolay <- getpolyol(data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT)
+polyolay <- getpolyol(data = xyt, regionalcovariates = pop18_SP, cellwidth = CellWidth, ext = EXT)
 #polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
 
 ## MODEL FORMULAE
 
-FORM <- X ~ moty
-FORM_Spatial <- X ~ pop.count -1
+FORM <- X ~ den18 + moty
+FORM_Spatial <- X ~ den18
 FORM_Temporal <- t ~ moty -1
 
 # set the interpolation type for each variable
 
-pop18@data <- guessinterp(pop18@data)
-pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop.count"), value = "ArealWeightedMean")
-class(pop18@data$pop.count)
+pop18_SP@data <- guessinterp(pop18_SP@data)
+pop18_SP@data <- assigninterp(df = pop18_SP@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18"), value = "ArealWeightedMean")
+class(pop18_SP@data$den18)
 
-## DESIGN MATRIX
 #pop3 <- setClass(pop3, slots = c(Total_0.10 = "numeric", geometry = "numeric"))
-#popDen18_ <- as_Spatial(popDen18_) # changing class type of the object to S4
+#popDen18_ <- as_Sp
+## DESIGN MATRIXatial(popDen18_) # changing class type of the object to S4
 #xyt <- as_Spatial(xyt)
 #Zmat <- getZmat(formula = FORM, data = xyt, regionalcovariates = popDen18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
-Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
+
+Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18_SP, cellwidth = CellWidth, ext = EXT, overl = polyolay)
 plot(Zmat)
+
+pop_count <- attr(Zmat,"data.frame")
+pop_area <- attr(Zmat,"polygonOverlay")
+pop <- pop_count$den18[0:853]*pop_area$area[0:853]
+
+## SECOND MODEL FORMULAE
+
+FORM <- X ~ moty
+FORM_Spatial <- X ~ pop
+FORM_Temporal <- t ~ moty -1
+
+## SECOND INTERPOLATION - set the interpolation type for each variable
+
+pop18<-as_Spatial(pop18)
+
+pop18@data <- guessinterp(pop18@data)
+pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop"), value = "ArealWeightedMean")
+class(pop18@data$den18)
+
 #Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
 
 # Specifying log of population counts to comply with Poisson model
@@ -213,7 +235,6 @@ Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "n
                    spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))))
 
 # plot the spatial interpolated covariates
-
 plot(Zmat, ask = F) 
 
 # construct dummy temporal data frame
@@ -222,20 +243,28 @@ plot(Zmat, ask = F)
 #da <- rep(days, length.out = length(tvec))
 #tdata <- data.frame(t = tvec, dotw = da)
 
-months.of.year <- c("March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "January", "February")
+#months.of.year <- c("January", "February","March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 tvec <- xyt$tlim[1]:xyt$tlim[2]
-ma <- rep(months.of.year, length.out = length(tvec+30))
+#tvec <- int_start(tm):int_end(tm)
+#ma <- as_date(tvec)
+i=0
+for(i in 0:633){
+ yy<-ymd(20150328) + ddays(i)
+ tim <-month(ymd(yy))
+}
+#xx <- data.frame(count(cbind(year(tm),month(ymd(tm)))))
+ma <- rep(yy, length.out = length(tvec))
 tdata <- data.frame(t = tvec, moty = ma)
 
 # choose last time point and number of proceeding time-points to include
 
-tim <- 17165
-tim <- as.integer(tim)
+ti <- 17155
+ti <- as.integer(ti)
 LAGLENGTH <- 25
 LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
-ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = tim, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
+ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = ti, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
 
 ## DEFINING PRIORS
 
@@ -257,7 +286,7 @@ CF <- CovFunction(exponentialCovFct)
 
 DIRNAME <- getwd()
 
-SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = tim, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
+SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = ti, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
                              model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, poisson.offset =  Pop.offset, 
                              mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
