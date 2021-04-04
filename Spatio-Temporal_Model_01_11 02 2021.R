@@ -64,7 +64,7 @@ plot(xy_utm)
 # Defining the time object which will be used for modelling
 
 Time_lim <- as.integer(c(16522,17155)) # first and last value for object t
-#Time_lim <- as.integer(1,310)
+#Time_lim <- as.integer(c(16522,16832))
 
 ## population density for Blantyre (2018)
 pop18 <- st_read("Blantyre_City.shp") # from NSO; shape file
@@ -175,22 +175,22 @@ Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18_S
 plot(Zmat)
 
 pop_count <- attr(Zmat,"data.frame")
-pop_area <- attr(Zmat,"polygonOverlay")
+pop_area <- attr(Zmat,"polygonOverlay")$info
 pop <- pop_count$den18[0:853]*pop_area$area[0:853]
 
 ## SECOND MODEL FORMULAE
 
-FORM <- X ~ moty
-FORM_Spatial <- X ~ pop
-FORM_Temporal <- t ~ moty -1
+#FORM <- X ~ moty
+#FORM_Spatial <- X ~ pop
+#FORM_Temporal <- t ~ moty -1
 
 ## SECOND INTERPOLATION - set the interpolation type for each variable
 
-pop18<-as_Spatial(pop18)
+#pop18<-as_Spatial(pop18)
 
-pop18@data <- guessinterp(pop18@data)
-pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop"), value = "ArealWeightedMean")
-class(pop18@data$den18)
+#pop18@data <- guessinterp(pop18@data)
+#pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop"), value = "ArealWeightedMean")
+#class(pop18@data$den18)
 
 #Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
 
@@ -235,7 +235,7 @@ Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "n
                    spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))))
 
 # plot the spatial interpolated covariates
-plot(Zmat, ask = F) 
+plot(Zmat, ask = F)
 
 # construct dummy temporal data frame
 #days <- c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
@@ -243,18 +243,21 @@ plot(Zmat, ask = F)
 #da <- rep(days, length.out = length(tvec))
 #tdata <- data.frame(t = tvec, dotw = da)
 
-#months.of.year <- c("January", "February","March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-tvec <- xyt$tlim[1]:xyt$tlim[2]
-#tvec <- int_start(tm):int_end(tm)
-#ma <- as_date(tvec)
-i=0
-for(i in 0:633){
- yy<-ymd(20150328) + ddays(i)
- tim <-month(ymd(yy))
-}
-#xx <- data.frame(count(cbind(year(tm),month(ymd(tm)))))
-ma <- rep(yy, length.out = length(tvec))
-tdata <- data.frame(t = tvec, moty = ma)
+# construct dummy temporal data frame
+dt <- as.Date(t,origin = "1970-01-01")
+months.of.year <- lubridate::month(ymd(dt), label = TRUE)
+months.of.year <- unique(months.of.year)
+#months.of.year <- levels(months.of.year)
+tvec <- seq(ymd("2015-03-28"),ymd("2016-12-20"),by=1)
+#tvec <- 1:length(dt)
+mo <- rep(months.of.year, length.out = length(tvec))
+dvec <- c(rep(NA,324))
+#tvec <- rbind(tvec,dvec)
+#i=1
+#for(i in 1:634){
+#ifelse(tvec[i]<=310,mo[i] <- months.of.year[i],mo[i] <- NA)
+#}
+tdata <- data.frame(t = tvec, moty = mo)
 
 # choose last time point and number of proceeding time-points to include
 
