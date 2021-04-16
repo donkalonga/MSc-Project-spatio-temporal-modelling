@@ -6,12 +6,12 @@ rm(list = ls())
 
 library(tidyverse)
 library(lubridate)
-#library(ggplot2)
+library(ggplot2)
 library(ggmap)
 library(rgdal)
 library(rgeos)
 library(maptools)
-#library(dplyr)
+library(dplyr)
 library(plyr)
 library(tidyr)
 library(tmap)
@@ -43,7 +43,7 @@ library(units)
 library(udunits2)
 library(fasterize)
 
-dat<-read.csv("Model_01_Data.csv") %>% # 540 cases
+dat<-read.csv("ST_All-Lineages_Data.csv") %>% # 540 cases
   dplyr::select(hh_LAT, hh_LNG, sample_collected) %>%
   filter(!is.na(hh_LAT)) #removing records with missing GPS coordinates
 #dat <- read.csv("ST_All-Linege_Data.csv")
@@ -53,8 +53,9 @@ dim(dat) # 310 cases
 x <- dat$hh_LNG
 y <- dat$hh_LAT
 t <- dat$sample_collected
-tm <- as.Date(t,origin="1970-01-01")
-
+t <- as.Date(t,origin="2015-03-27")
+tm <- as.integer(t - min(t))
+tm <- tm+1
 # Converting coordinates to utm
 xy <- SpatialPoints(cbind(x,y), proj4string=CRS("+proj=longlat"))
 xy_utm <-spTransform(xy, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84"))
@@ -63,7 +64,7 @@ plot(xy_utm)
 
 # Defining the time object which will be used for modelling
 
-Time_lim <- as.integer(c(16522,17155)) # first and last value for object t
+Time_lim <- as.integer(c(1,634)) # first and last value for object t
 #Time_lim <- as.integer(c(16522,16832))
 
 ## population density for Blantyre (2018)
@@ -107,9 +108,10 @@ BTShapeF_owin
 inside.owin(xy_utm$x,xy_utm$y,BTShapeF_owin) # 16 cases are outside the owin boundary
 
 #Setting up a spatio-temporal object
-STdat <- cbind(xy_utm$x,xy_utm$y,t)
+STdat <- cbind(xy_utm$x,xy_utm$y,tm)
 xyt <- stppp(list(data=STdat, tlim = Time_lim, window = BTShapeF_owin))
 xyt # only 294 cases included 
+xyt$t <- as.integer(xyt$t)
 plot(xyt)
 
 # computing approximate values of the process Y 
@@ -129,7 +131,6 @@ Spatrisk  <- spatialAtRisk(denty)
 Spatrisk
 
 # Plotting temporal intensity mu(t)
-xyt$t <- as.integer(xyt$t)
 mu_t <- muEst(xyt, f=1/20) # f is the lowess argument for smoothing
 mu_t # temporalAtRisk object
 plot(mu_t)
@@ -155,15 +156,15 @@ polyolay <- getpolyol(data = xyt, regionalcovariates = pop18_SP, cellwidth = Cel
 
 ## MODEL FORMULAE
 
-FORM <- X ~ den18 + moty
-FORM_Spatial <- X ~ den18
+FORM <- X ~ Total_0.10 + moty
+FORM_Spatial <- X ~ Total_0.10
 FORM_Temporal <- t ~ moty -1
 
 # set the interpolation type for each variable
 
 pop18_SP@data <- guessinterp(pop18_SP@data)
-pop18_SP@data <- assigninterp(df = pop18_SP@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18"), value = "ArealWeightedMean")
-class(pop18_SP@data$den18)
+pop18_SP@data <- assigninterp(df = pop18_SP@data, vars =  c( "Total_0.10"), value = "ArealWeightedSum")
+class(pop18_SP@data$Total_0.10)
 
 #pop3 <- setClass(pop3, slots = c(Total_0.10 = "numeric", geometry = "numeric"))
 #popDen18_ <- as_Sp
@@ -174,33 +175,19 @@ class(pop18_SP@data$den18)
 Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18_SP, cellwidth = CellWidth, ext = EXT, overl = polyolay)
 plot(Zmat)
 
-pop_count <- attr(Zmat,"data.frame")
-pop_area <- attr(Zmat,"polygonOverlay")$info
-pop <- pop_count$den18[0:853]*pop_area$area[0:853]
-
-## SECOND MODEL FORMULAE
-
-#FORM <- X ~ moty
-#FORM_Spatial <- X ~ pop
-#FORM_Temporal <- t ~ moty -1
-
-## SECOND INTERPOLATION - set the interpolation type for each variable
-
-#pop18<-as_Spatial(pop18)
-
-#pop18@data <- guessinterp(pop18@data)
-#pop18@data <- assigninterp(df = pop18@data, vars =  c( "EA_NUMBER","den18","Total_0.10","area18", "pop"), value = "ArealWeightedMean")
-#class(pop18@data$den18)
-
-#Zmat <- getZmat(formula = FORM.spatial, data = xyt, cellwidth = NULL, regionalcovariates = pop3, ext = NULL, overl = NULL)
-
 # Specifying log of population counts to comply with Poisson model
 # so that number of cases to be proportional to population at risk
 # and not the exponential of population
 
-#Zmat[, "den18"] <- log(Zmat[,"den18"])
-#Zmat[, "den18"][is.infinite(Zmat[, "den18"])] <- min(Zmat[, "den18"][!is.infinite(Zmat[, "den18"])]) 
-#plot(Zmat)
+Zmat[, "Total_0.10"] <- log(Zmat[,"Total_0.10"])
+Zmat[, "Total_0.10"][is.infinite(Zmat[, "Total_0.10"])] <- min(Zmat[, "Total_0.10"][!is.infinite(Zmat[, "Total_0.10"])]) 
+plot(Zmat)
+
+## SECOND MODEL FORMULAE
+
+FORM <- X ~ moty
+FORM_Spatial <- X ~ 1
+FORM_Temporal <- t ~ moty -1
 
 # DEFINING THE OFFSET
 
@@ -244,24 +231,17 @@ plot(Zmat, ask = F)
 #tdata <- data.frame(t = tvec, dotw = da)
 
 # construct dummy temporal data frame
-dt <- as.Date(t,origin = "1970-01-01")
-months.of.year <- lubridate::month(ymd(dt), label = TRUE)
-months.of.year <- unique(months.of.year)
-#months.of.year <- levels(months.of.year)
-tvec <- seq(ymd("2015-03-28"),ymd("2016-12-20"),by=1)
-#tvec <- 1:length(dt)
-mo <- rep(months.of.year, length.out = length(tvec))
-dvec <- c(rep(NA,324))
-#tvec <- rbind(tvec,dvec)
-#i=1
-#for(i in 1:634){
-#ifelse(tvec[i]<=310,mo[i] <- months.of.year[i],mo[i] <- NA)
-#}
+months.of.year <- lubridate::month(ymd(t), label = TRUE)
+tvec <- seq(min(ymd(t)),max(ymd(t)),by=1)
+mo <- lubridate::month(ymd(tvec), label = TRUE)
+tvec <- as.integer(tvec - min(tvec))
+tvec <- tvec + 1
+
 tdata <- data.frame(t = tvec, moty = mo)
 
 # choose last time point and number of proceeding time-points to include
 
-ti <- 17155
+ti <- max(tm)
 ti <- as.integer(ti)
 LAGLENGTH <- 25
 LAGLENGTH <- as.integer(LAGLENGTH)
