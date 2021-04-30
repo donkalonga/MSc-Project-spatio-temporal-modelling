@@ -139,7 +139,7 @@ plot(mu_t)
 ## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
 ###########################################
 
-CellWidth <- 1000 # Change this value to change computational grid size
+CellWidth <- 200 # Change this value to change computational grid size
 EXT <- 2 # to be used during polygon overlay
 minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
 chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
@@ -201,32 +201,32 @@ Zmat[, "Total_0.10"][is.infinite(Zmat[, "Total_0.10"])] <- min(Zmat[, "Total_0.1
 mm <- length(attr(Zmat_off, "mcens"))
 nn <- length(attr(Zmat_off, "ncens"))
 
-Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))))
+Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
+                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))))
 
 # plot the spatial interpolated covariates
 plot(Zmat, ask = F)
