@@ -64,7 +64,7 @@ plot(xy_utm)
 
 # Defining the time object which will be used for modelling
 
-Time_lim <- as.integer(c(1,634)) # first and last value for object t
+Time_lim <- as.integer(c(min(tm),max(tm))) # first and last value for object t
 #Time_lim <- as.integer(c(16522,16832))
 
 ## population density for Blantyre (2018)
@@ -140,7 +140,7 @@ plot(mu_t)
 ###########################################
 
 CellWidth <- 1000 # Change this value to change computational grid size
-EXT <- 3 # to be used during polygon overlay
+EXT <- 2 # to be used during polygon overlay
 minimum.contrast(xyt, model = "exponential", method = "g", intens = density(xyt), transform = log)
 chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
 
@@ -148,17 +148,28 @@ chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
 
 # convert to SpatialPolygonsDataFrame
 pop18_SP<-as_Spatial(pop18)
+off <- st_read("Blantyre_City.shp")
+#off <- off$geometry
+off <- st_transform(off, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
+off_SP <- as_Spatial(off)
+
 
 # perform polygon overlay operations and compute computational grid
 
 polyolay <- getpolyol(data = xyt, regionalcovariates = pop18_SP, cellwidth = CellWidth, ext = EXT)
-#polyolay <- getpolyol(data = xyt, regionalcovariates = popDen18$den18, cellwidth = CellWidth, ext = EXT)
+polyolay_off <- getpolyol(data = xyt, regionalcovariates = off_SP, cellwidth = CellWidth, ext = EXT)
 
-## MODEL FORMULAE
+## FIRST MODEL FORMULAE
 
 FORM <- X ~ Total_0.10 + moty
 FORM_Spatial <- X ~ Total_0.10
 FORM_Temporal <- t ~ moty -1
+
+## SECOND MODEL FORMULAE
+
+FORM_2 <- X ~ moty
+FORM_Spatial_2 <- X ~ 1
+FORM_Temporal_2 <- t ~ moty -1
 
 # set the interpolation type for each variable
 
@@ -173,7 +184,9 @@ class(pop18_SP@data$Total_0.10)
 #Zmat <- getZmat(formula = FORM, data = xyt, regionalcovariates = popDen18, cellwidth = CellWidth, ext = EXT, overl = polyolay)
 
 Zmat <- getZmat(formula = FORM_Spatial, data = xyt, regionalcovariates = pop18_SP, cellwidth = CellWidth, ext = EXT, overl = polyolay)
-plot(Zmat)
+Zmat_off <- getZmat(formula = FORM_Spatial_2, data = xyt, regionalcovariates = NULL, cellwidth = CellWidth, ext = EXT, overl = polyolay_off)
+
+#plot(Zmat)
 
 # Specifying log of population counts to comply with Poisson model
 # so that number of cases to be proportional to population at risk
@@ -181,18 +194,12 @@ plot(Zmat)
 
 Zmat[, "Total_0.10"] <- log(Zmat[,"Total_0.10"])
 Zmat[, "Total_0.10"][is.infinite(Zmat[, "Total_0.10"])] <- min(Zmat[, "Total_0.10"][!is.infinite(Zmat[, "Total_0.10"])]) 
-plot(Zmat)
-
-## SECOND MODEL FORMULAE
-
-FORM <- X ~ moty
-FORM_Spatial <- X ~ 1
-FORM_Temporal <- t ~ moty -1
+#plot(Zmat)
 
 # DEFINING THE OFFSET
 
-mm <- length(attr(Zmat, "mcens"))
-nn <- length(attr(Zmat, "ncens"))
+mm <- length(attr(Zmat_off, "mcens"))
+nn <- length(attr(Zmat_off, "ncens"))
 
 Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
                    spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "ncens"), Zm = matrix(Zmat, mm, nn))),
@@ -223,6 +230,7 @@ Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat, "mcens"), Y = attr(Zmat, "n
 
 # plot the spatial interpolated covariates
 plot(Zmat, ask = F)
+plot(Zmat_off, ask = F)
 
 # construct dummy temporal data frame
 #days <- c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
@@ -231,11 +239,14 @@ plot(Zmat, ask = F)
 #tdata <- data.frame(t = tvec, dotw = da)
 
 # construct dummy temporal data frame
-months.of.year <- lubridate::month(ymd(t), label = TRUE)
-tvec <- seq(min(ymd(t)),max(ymd(t)),by=1)
-mo <- lubridate::month(ymd(tvec), label = TRUE)
-tvec <- as.integer(tvec - min(tvec))
-tvec <- tvec + 1
+#months.of.year <- lubridate::month(ymd(t), label = TRUE)
+months.of.year <- c("Mar", "Apr" ,"May","Jun", "Jul", "Aug", "Sep" ,"Oct" ,"Nov", "Dec","Jan" ,"Feb")
+tvec <- xyt$tlim[1]:xyt$tlim[2]
+#tvec <- seq(min(ymd(t)),max(ymd(t)),by=1)
+#mo <- lubridate::month(ymd(tvec), label = TRUE)
+mo <- rep(months.of.year, length.out = length(tvec))
+#tvec <- as.integer(tvec - min(tvec))
+#tvec <- tvec + 1
 
 tdata <- data.frame(t = tvec, moty = mo)
 
@@ -248,6 +259,11 @@ LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
 ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = ti, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
+
+#for(j in 1:length(ZmatList))
+#{
+#  ZmatList[[j]]<-ZmatList[[j]][,-which(colnames(ZmatList[[j]])=="Total_0.10")]
+#}
 
 ## DEFINING PRIORS
 
@@ -271,7 +287,7 @@ DIRNAME <- getwd()
 
 SpatioTemporal_Model_01 <- lgcpPredictSpatioTemporalPlusPars(formula = FORM, xyt = xyt, T = ti, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
                              model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, poisson.offset =  Pop.offset, 
-                             mcmc.control = mcmcpars(mala.length = 2000, burnin = 100, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
+                             mcmc.control = mcmcpars(mala.length = 1000, burnin = 100, retain = 10, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Model_01"), 
                              forceSave = TRUE)), ext = EXT) 
 
