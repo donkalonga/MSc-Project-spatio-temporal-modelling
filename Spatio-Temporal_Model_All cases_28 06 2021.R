@@ -68,7 +68,7 @@ Time_lim <- as.integer(c(min(tm),max(tm))) # first and last value for object t
 #Time_lim <- as.integer(c(16522,16832))
 
 ## population density for Blantyre (2018)
-pop18 <- st_read("Blantyre City Boundary-edited.shp") # from NSO; shape file
+pop18 <- st_read("Blantyre_City.shp") # from NSO; shape file
 pop18 <- st_transform(pop18, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
 BT_sp <- pop18
 EA_2018 <- read.csv("popEA_NSO_2018_BTCity_final.csv") # census data
@@ -92,7 +92,7 @@ plot(pop18["Total_0.10"], breaks=c(0,10,50,100,150,200,250,300,400,600,800,1000)
 plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4))
 
 # Owin object preparation for Blantyre City
-BTShapeF <- st_read("MWI_BlantyreCity.shp")
+BTShapeF <- st_read("Blantyre City Boundary-edited.shp")
 BTShapeF <- st_transform(BTShapeF, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
 
 BTShapeF
