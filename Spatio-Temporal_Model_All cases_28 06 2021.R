@@ -105,7 +105,7 @@ plot(BTShapeF_owin)
 BTShapeF_owin
 
 # Checking if all points are inside the owin object
-inside.owin(xy_utm$x,xy_utm$y,BTShapeF_owin) # 16 cases are outside the owin boundary
+table(inside.owin(xy_utm$x,xy_utm$y,BTShapeF_owin)) # All 310 cases inside owin
 
 #Setting up a spatio-temporal object
 STdat <- cbind(xy_utm$x,xy_utm$y,tm)
