@@ -41,6 +41,8 @@ library(stars)
 library(units)
 library(udunits2)
 library(fasterize)
+library(RandomFields)
+library(RandomFieldsUtils)
 
 dat<-read.csv("ST_All-Lineages_Data.csv") %>% 
   dplyr::select(hh_LAT, hh_LNG, sample_collected) %>%
