@@ -53,8 +53,9 @@ x <- dat$hh_LNG
 y <- dat$hh_LAT
 t <- dat$sample_collected
 t <- as.Date(t,origin="2015-03-27")
-tm <- as.integer(t - min(t))
-tm <- tm+1
+#tm <- as.integer(t - min(t))
+tm <- month(t)
+#tm <- tm+1
 
 # Converting coordinates to utm
 xy <- SpatialPoints(cbind(x,y), proj4string=CRS("+proj=longlat"))
@@ -89,7 +90,8 @@ plot(pop18["den18"], breaks=c(0,10,50,100,500,1000,2000,30000,4000,5000,1e4,2e4)
 
 # Owin object preparation for Blantyre City
 BTShapeF <- st_read("Blantyre City Boundary-edited.shp")
-BTShapeF <- st_transform(BTShapeF, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
+#BTShapeF <- st_read("MWI_BlantyreCity.shp")
+BTShapeF <- st_transform.sf(BTShapeF, "+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84")
 
 BTShapeF
 BTShapeF <- st_union(BTShapeF)
@@ -131,8 +133,8 @@ plot(mu_t)
 ## SIZE OF COMP GRID & OFFSET OBJECT DEFINITION ##
 ##################################################
 
-CellWidth <- 400 # Change this value to change computational grid size
-EXT <- 4 # to be used during polygon overlay
+CellWidth <- 350 # Change this value to change computational grid size
+EXT <- 2 # to be used during polygon overlay
 minimum.contrast(xyt, model  = "exponential", method = "g", intens = density(xyt), transform = log)
 chooseCellwidth(xyt,cwinit = CellWidth) # cell width is 175 metres
 
@@ -180,8 +182,6 @@ Pop.offset <- list(spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat
                    spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))),
                    spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))),
                    spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))),
-                   spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))),
                    spatialAtRisk(list(X = attr(Zmat_off, "mcens"), Y = attr(Zmat_off, "ncens"), Zm = matrix(Zmat_off, mm, nn))))
 
 # plot the spatial interpolated covariates
@@ -189,22 +189,44 @@ plot(Zmat, ask = F)
 plot(Zmat_off, ask = F)
 
 # construct dummy temporal data frame
-months.of.year <- c("Mar", "Apr" ,"May","Jun", "Jul", "Aug", "Sep" ,"Oct" ,"Nov", "Dec","Jan" ,"Feb")
-tvec <- xyt$tlim[1]:xyt$tlim[2]
-mo <- rep(months.of.year, length.out = length(tvec))
-tdata <- data.frame(t = tvec, moty = mo)
+#months.of.year <- c("Mar", "Apr" ,"May","Jun", "Jul", "Aug", "Sep" ,"Oct" ,"Nov", "Dec","Jan" ,"Feb")
+#tvec <- xyt$tlim[1]:xyt$tlim[2]
+#mo <- rep(months.of.year, length.out = length(tvec))
+#tdata <- data.frame(t = tvec, moty = mo)
+
+
+# construct dummy temporal data frame
+#months.of.year <- c("Mar", "Apr" ,"May","Jun", "Jul", "Aug", "Sep" ,"Oct" ,"Nov", "Dec","Jan" ,"Feb")
+monthsOfTheYear <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+#tvec<-seq(min(ymd(t)),max(ymd(t)),by="days")
+#tvec <- month(tvec)
+#tvec<-seq(min(ymd(t)),max(ymd(t)),by="month")
+tvecNum <- xyt$tlim[1]:xyt$tlim[2]
+#tvecNum <- min(tvec):max(tvec)
+#mo <- lubridate::month(t, label = T, abbr = T)
+#mo <- monthsOfTheYear[week(tvec)]
+mo <- monthsOfTheYear
+#tdata <- data.frame(t=tvec, tDate=tvec, motyNum=month(tvec), moty= mo) %>% dplyr::select(t,moty)
+#mo <- factor(tdata$moty,levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
+#mo <- as.character(tdata$moty)
+tdata <- data.frame(t=tvecNum, moty= mo)
+#tdata$moty <- as.character(tdata$moty)
 
 # choose last time point and number of proceeding time-points to include
 ti <- max(tm)
 ti <- as.integer(ti)
-LAGLENGTH <- 13
+LAGLENGTH <- 11
 LAGLENGTH <- as.integer(LAGLENGTH)
 
 # bolt on the temporal covariates
-ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal_2, T = ti, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
+ZmatList <- addTemporalCovariates(temporal.formula = FORM_Temporal, T = ti, laglength = LAGLENGTH, tdata = tdata, Zmat = Zmat)
+#image plot of the ZmatList 
+par(mar=c(2.1,1.1,1.1,1.1))
+par(mfrow = c(4,4))
+for (i in 1:12) {image.plot(ZmatList[[i]])}
 
 # defining eta and beta priors
-EtaP <- PriorSpec(LogGaussianPrior(mean = log(c(1,1000,1)), variance = diag(0.2,3)))
+EtaP <- PriorSpec(LogGaussianPrior(mean = log(c(1,1000,1)), variance = diag(0.15,3)))
 BetaP <- PriorSpec(GaussianPrior(mean = rep(0,12), variance = diag(1e+06, 12)))
 priors <- lgcpPrior(etaprior = EtaP, betaprior = BetaP)
 
@@ -222,7 +244,7 @@ DIRNAME <- getwd()
 
 SpatioTemporal_Model_All_Cases <- lgcpPredictSpatioTemporalPlusPars(formula = FORM_2, xyt = xyt, T = ti, laglength = LAGLENGTH, ZmatList = ZmatList, model.priors = priors, 
                              model.inits = INITS, spatial.covmodel = CF, cellwidth = CellWidth, poisson.offset =  Pop.offset, 
-                             mcmc.control = mcmcpars(mala.length = 5000, burnin = 1000, retain = 9, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
+                             mcmc.control = mcmcpars(mala.length = 1000000, burnin = 100000, retain = 900, adaptivescheme = andrieuthomsh(inith = 1, alpha = 0.5, C = 1, 
                              targetacceptance = 0.574)), output.control = setoutput(gridfunction = dump2dir(dirname = file.path(DIRNAME,"ST_Models"), 
                              forceSave = TRUE)), ext = EXT)
 
