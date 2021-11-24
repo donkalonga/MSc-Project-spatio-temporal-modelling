@@ -1,4 +1,4 @@
-function (mcmcloop, inits, adaptivescheme, M, N, Mext, Next, 
+MALAlgcpMultitypeSpatial.PlusParsDonKalonga <- function (mcmcloop, inits, adaptivescheme, M, N, Mext, Next, 
           mcens, ncens, formulaList, zml, Zmat, model.priorsList, model.initsList, 
           fftgrid, spatial.covmodelList, nis, cellarea, spatialvals, 
           cellInside, MCMCdiag, gradtrunc, gridfun, gridav, marks, 
