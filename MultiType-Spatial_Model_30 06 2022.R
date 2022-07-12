@@ -1,7 +1,7 @@
 ############
 ## SET-UP ##
 ############
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 library(tidyverse)
