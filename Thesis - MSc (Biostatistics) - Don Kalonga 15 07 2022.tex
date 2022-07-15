@@ -1,0 +1,1477 @@
+\documentclass[a4paper]{thesis}
+%\documentclass[12pt,a4paper]{book}
+\usepackage[left=2.5cm,right=1.5cm,top=3cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr} 
+%\usepackage[english]{babel}
+%\usepackage[extreme]{savetrees}
+\usepackage[onehalfspacing]{setspace}
+\usepackage{grffile}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{calc}
+\usepackage{eso-pic} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{tabto}
+\usepackage{array}
+%\usepackage[margin=0.5cm]{geometry}
+\usepackage{verbatimbox}
+\usepackage{booktabs}
+%\usepackage{listings}
+\usepackage{color,soul}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{eucal, amssymb,amsmath, amsfonts, latexsym}
+\usepackage{graphicx}
+\usepackage[matrix, arrow, curve]{xy} % special package for diagrams
+\usepackage{float}
+\usepackage{multirow,enumerate}
+\usepackage{setspace}
+\graphicspath{{storage/}}
+%\setlength{\textwidth}{15.3cm} \setlength{\textheight}{26cm}
+%\setlength{\oddsidemargin}{1.0cm}
+%\setlength{\evensidemargin}{1.0cm} \setlength{\topmargin}{0.1cm}
+%\headsep 0.2cm \marginparwidth 0pt \marginparsep 0pt
+\def\E{{\mathcal E}}
+\def\dss{\displaystyle}
+\usepackage[english]{babel}
+\newcommand{\disp}{\displaystyle}
+\parindent=0pt
+\renewcommand{\baselinestretch}{2.0} 
+\usepackage{hyperref} 
+%\parindent 0in
+
+\begin{document}
+
+\begin{titlepage}
+
+%\fancyhf{}
+%\cfoot{\thepage}
+%\pagestyle{plain} 
+
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=40mm,height=50mm]
+%{Unima_Logo.png}
+%\end{center}
+%\end{figure}
+
+%\pagestyle{empty}
+%\pagenumbering{roman}
+\pagenumbering{gobble}
+
+\begin{large}
+\begin{center}
+\textbf{MULTI-TYPE SPATIAL AND SPATIO-TEMPORAL LOG-GAUSSIAN COX PROCESS MODELLING 
+OF THE SEVEN GENOMIC SUB-LINEAGES OF H58 SALMONELLA TYPHI 
+IN BLANTYRE}\\
+\end{center}
+\end{large}
+\par \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip
+
+
+\begin{large}
+\begin{center}
+\bf{MSc (BIOSTATISTICS) THESIS}\\
+\end{center}
+\end{large}
+
+\par \bigskip  \bigskip  \bigskip \bigskip \bigskip \bigskip  \bigskip  \bigskip \bigskip \bigskip
+
+\begin{large}
+\begin{center}
+\bf{DON WATSON KALONGA}\\
+\end{center}
+\end{large}
+
+\par \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip 
+
+
+\begin{large}
+\begin{center}
+\bf{UNIVERSITY OF MALAWI}\\
+\end{center}
+\end{large}
+
+\par 
+
+\begin{large}
+\begin{center}
+JULY, 2022\\
+\end{center}
+\end{large}
+
+\end{titlepage}
+
+\newpage
+
+\begin{titlepage}
+
+
+%\pagestyle{empty}
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\begin{large}
+\begin{center}
+\textbf{MULTI-TYPE SPATIAL AND SPATIO-TEMPORAL LOG-GAUSSIAN COX PROCESS MODELLING 
+OF THE SEVEN GENOMIC SUB-LINEAGES OF H58 SALMONELLA TYPHI 
+IN BLANTYRE} 
+\end{center}
+\end{large}
+\par \bigskip \bigskip \bigskip \bigskip
+
+
+\begin{large}
+\begin{center}
+\bf{MSc (Biostatistics) Thesis}\\
+\end{center}
+\end{large}
+
+\par \bigskip  \bigskip  \bigskip  
+
+\begin{large}
+\begin{center}
+\bf{By}\\
+\end{center}
+\end{large}
+
+\par \bigskip  \bigskip  \bigskip 
+
+\begin{large}
+\begin{center}
+\bf{DON WATSON KALONGA}\\
+\end{center}
+\end{large}
+
+\begin{large}
+\begin{center}
+\bf{BSc in Mathematical Sciences Education - MUBAS}\\
+\end{center}
+\end{large}
+
+\par \bigskip \bigskip 
+
+\begin{center}
+Thesis submitted to the department of Mathematical Sciences, Faculty of Science, 
+In partial fulfilment of the requirement of the degree of 
+Master of Science (Biostatistics)\\
+\end{center}
+
+\par \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip \bigskip
+\bigskip \bigskip
+
+
+\begin{large}
+\begin{center}
+\bf{UNIVERSITY OF MALAWI}\\
+\end{center}
+\end{large}
+
+\par 
+
+\begin{large}
+\begin{center}
+JULY, 2022\\
+\end{center}
+\end{large}
+
+\end{titlepage}
+
+\newpage
+
+\thispagestyle{empty}
+
+\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{DECLARATION}
+
+\begin{large}
+\begin{center}
+\bf{DECLARATION}\\
+\end{center}
+\end{large}
+
+\par \bigskip
+
+{\centering {In accordance with the regulation of the University of Malawi, I, the undersigned, hereby declare that the work described here is my own original work, except where due reference are made, and has not been submitted for a degree in any university or institution.}}\\
+
+\par \bigskip \bigskip \bigskip
+
+\begin{large}
+\begin{center}
+\underline{\bf{DON WATSON KALONGA}}\\
+\end{center}
+\end{large}
+
+\begin{center}
+\bf{Full Legal Name}
+\end{center}
+
+\par \bigskip \bigskip \bigskip
+
+\begin{center}
+\rule{10cm}{0.2mm}\\
+\bf{Signature}
+\end{center}
+
+
+
+
+\par \bigskip \bigskip \bigskip
+
+\begin{center}
+\rule{10cm}{0.2mm}\\
+\bf{Date}
+\end{center}
+
+\newpage
+
+
+\thispagestyle{empty}
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{CERTIFICATE OF APPROVAL}
+
+\begin{large}
+\begin{center}
+\bf{CERTIFICATE OF APPROVAL}\\
+\end{center} 
+\end{large}
+
+\par
+
+\begin{flushleft}
+\normalfont{The undersigned certify that this thesis represents the student’s own work and effort and has been submitted with my approval}\\
+\end{flushleft}
+
+\normalfont {Signature : \rule{5cm}{0.2mm}    Date : \rule{5cm}{0.2mm}}
+
+Marc Y. R. Henrion, Msci PhD GradStat (Lecturer)\\
+\bf{Main Supervisor}
+
+\newpage
+
+\thispagestyle{empty}
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{DEDICATION}
+
+\begin{large}
+\begin{center}
+\bf{DEDICATION}\\
+\end{center}
+\end{large}
+
+\par \bigskip
+
+\normalfont {This thesis is dedicated to my grandmother Maria Kalonga and my aunt Mrs Jane Chinyengo.}\\
+
+\newpage
+
+%\thispagestyle{empty}
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{ACKNOWLEDGEMENTS}
+
+\begin{large}
+\begin{center}
+\bf{ACKNOWLEDGEMENTS}\\
+\end{center}
+\end{large}
+
+\par
+
+\normalfont {
+It has been a long and difficult journey for this thesis and the MSc in general to become a reality. This MSc would not have been possible without the support of many people.\\
+
+I would like to sincerely thank God for His guidance throughout my study.\\
+
+I would like to thank my supervisor, Dr Marc Henrion for the support and encouragement during the development of this thesis. His comments, suggestions and patience played an enormous role in the development of this thesis. Please receive my sincere thanks.\\
+
+I would also like to thanks Prof. Nick Feasey for approving the use of the morbidity, carriage and genomic epidemiology of typhoid (MCET) study data for this thesis. Your guidance helped to shape the concept of this thesis.\\
+
+I am also indebted to Dr Jillian Gauld who played a critical role for me to better understand the MCET data and organise it for its use in this thesis.\\
+
+I would like to thank by boss, Mr A. Masiye, for allowing me time off from work to attend classes and all the demands of the MSc. He shouldered most of my responsibilities so that I should have undisrupted studies. I will forever be grateful for his sacrifice.\\
+
+I would also like to thanks Mr Isaac Kasenjere for hosting me at his home for the entire period of my studies at the University of Malawi. You are one of the few good men I know. I will forever be grateful.\\
+
+Special thanks should also go to my wife, Marie Kalonga, and my two sons, Michael and Seth for their moral support during my studies. You have been the reason I did not give up even when the going got tough multiple times.}
+
+\newpage
+
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+\begin{large}
+\begin{center}
+\bf{ABSTRACT}
+\end{center}
+\end{large}
+
+\textit{Background}
+
+Typhoid fever is a major cause of morbidity and mortality in low and middle-income countries, with an estimated 10–20 million cases and approximately 200,000 deaths occurring annually. A recent epidemic of typhoid fever in Blantyre saw cases rise from 67 in 2011 to 782 in 2014. An MCET study which was conducted in 2015 and 2016 found out that there are 7 genomic sub-lineages of H58 lineage of Salmonella Typhi which caused the outbreak. No study was conducted to describe the spatial and spatio-temporal distribution of the 7 sub-lineages so as to explain their transmission routes.
+
+\textit{Methodology}
+
+Out of the 7 sub-lineages, five caused fewer Typhoid fever cases. These were merged into one for model fitting. Five LGCP models were fitted. One being multi-type spatial LGCP model and the remaining four were spatio-temporal LGCP models. The spatio-temporal LGCP models assumed a separable covariance function for the Gaussian process.
+
+\textit{Results}
+
+The parameters in the spatio-temporal Gaussian process include $\sigma$ with median of 2.185 (95\% CRI 1.93 to 2.497); the parameter $\phi$ had a median of 940.1 metres (95\% CRI 709 to 1275); and the parameter $\theta$ had a median of 7.46 months $\times10^{-2}$ (95\% CRI 4.952$\times10^{-2}$ to 0.1072). The long term distribution of the Typhoid cases show that the outbreak was at its peak between October and November 2015. The following areas registered four times higher relative risk of Typhoid than others locations within Blantyre city: Mbayani, Ndirande, Nkolokoti-Kachere, Chirimba, Bangwe-Namiyango, Mzedi, Manje-Misesa and Nancholi. The multi-type spatial LGCP model has also shown that the spatial distribution of the three sub-lineages where distinct from each other.
+
+\textit{Conclusion \& Limitations}
+
+The analysis provides evidence that specific sub-lineages of H58 lineage of Salmonella Typhi caused the Typhoid fever outbreak in specific areas unlike being distributed randomly across Blantyre city. This knowledge can help stakeholders to develop novel vaccine or other targeted intervention for the disease. The study failed to assess seasonality as a temporal covariate because the MCET dataset only had a maximum of 22 time points. For an improved spatio-temporal analysis, it would be better to develop a multitype spatio-temporal model and to increase the number of cases used in the analysis.
+
+\renewcommand\contentsname{TABLE OF CONTENTS}
+
+\begin{large}
+\begin{center}
+\tableofcontents
+%\addcontentsline{toc}{chapter}{TABLE OF CONTENTS}
+\end{center}
+\end{large}
+
+\begin{large}
+\begin{center}
+\listoffigures
+\end{center}
+\end{large}
+
+\begin{large}
+\begin{center}
+\listoftables
+\end{center}
+\end{large}
+
+\newpage
+
+%\pagenumbering{roman}
+%\pagenumbering{gobble}
+
+\addcontentsline{toc}{chapter}{LIST OF ABBREVIATIONS AND ACRONYMS}
+
+
+\begin{large}
+\begin{center}
+\bf{LIST OF ABBREVIATIONS AND ACRONYMS}
+\end{center}
+\end{large}
+
+\begin{table}[H]
+\begin{tabular}{c l c}
+LGCP &  Log-Gaussian Cox Process\\
+MCET & Morbidity, Carriage and Genomic Epidemiology of Typhoid\\
+ABR & Antibacterial Resistance\\
+BSI &  Bloodstream Infections\\
+QECH & Queen Elizabeth Central Hospital\\
+MDR & Multidrug Resistance\\
+NTS & Nontyphoidal Serovars of Salmonella\\
+EA & Enumeration Area\\
+MoH & Ministry of Health\\
+GoM & Government of Malawi\\
+PCF & Pairwise correlation Function\\
+MCMC & Markov chain Monte Carlo\\
+INLA & Integrated Nested Laplace Approximation\\
+EAI & Epidemic Avian Influenza\\
+ZVD & Zika Virus Disease\\
+BTB & Bovine Tuberculosis\\
+HIV & Human Immunodeficiency Virus\\
+ePAL & Electronic PArticipant Locator application
+\end{tabular}
+\end{table}
+
+\begin{center}
+\chapter{INTRODUCTION}
+\end{center} 
+
+\pagenumbering{arabic}
+
+\section{Background Information}
+
+Bacteria of the genus Salmonella are a major cause of foodborne illness throughout the world. As a zoonotic pathogen, Salmonella can be found in the intestines of many food-producing animals such as poultry and pigs. Infection is usually acquired by consumption of contaminated water or food of animal origin: mainly undercooked meat, poultry, eggs and milk. Human or animal faeces can also contaminate the surface of fruits and vegetables, which can lead to foodborne outbreaks.\cite{WHO} \\
+
+Most Salmonella strains cause gastroenteritis, while some strains, particularly Salmonella enterica serotypes Typhi and Paratyphi, are more invasive and typically cause enteric fever. Enteric (typhoid) fever is a more serious infection that poses problems for treatment due to Antibacterial Resistance (ABR) in many parts of the world. It is estimated that 27 million cases and 270,000 deaths occur annually.\cite{Buckle} However, the statistics for Sub-Saharan Africa (SSA) are not accurate because of limited health facilities with microbiological diagnostic capabilities. \cite{Peters} As a result, others have suggested that the burden of Typhoid fever in Africa before 2010 has been over-estimated. \cite{Mweu}
+
+\section{Salmonella Typhi in Blantyre}
+
+A longitudinal health surveillance study done in Blantyre, Malawi has shown that before 2010, most of the Bloodstream Infections (BSI) registered at Queen Elizabeth Central Hospital (QECH) were caused by multidrug resistant (MDR) nontyphoidal serovars of Salmonella (NTS) while Salmonella Typhi only caused 1\% of the BSI.\cite{Gordon} The study found out that between 1998 and 2010, there were only 176 microbiologically confirmed cases of S. Typhi at QECH in Blantyre. This represents an average of 14 cases per year. Only 12 of the 176 cases were found to be multidrug resistant (MDR) to ampicillin, chloramphenicol and cotrimoxazole. However, from 2011, the surveillance study showed a rapid increase in microbiologically confirmed Salmonella Typhi. For example, 67 Typhoid fever cases were confirmed in 2011 followed by 186 cases in 2012 and 843 cases in 2013 and 782 cases in 2014.\\
+
+In trying to understand the transmission routes of the rapid increase in cases of microbiologically confirmed Salmonella Typhi infections, several studies were conducted. One of the studies was the Morbidity, carriage and genomic epidemiology of typhoid (MCET) which was conducted from March 2015 to January 2017.\cite{Feasey} The aim of the study was to investigate whether the Typhoid fever cases were caused by a single lineage of S. Typhi, and to describe the full diversity of S. Typhi in Blantyre.\\
+
+In the study patients, under the age of 10, diagnosed with culture-confirmed typhoid fever at QECH in Blantyre were recruited in the cohort study. Controls were recruited in the ratio of 4 to 1. A total of 314 cases consented to provide their household locations, and 256 isolates were whole genome sequenced. The results revealed that the epidemic of Typhoid fever was being caused by the MDR Salmonella Typhi lineage called H58-haplotype of S. Typhi.\cite{Gauld2019a} Further analysis of the H58 lineage revealed that there are 7 sub-lineages of the H58-haplotype which were causing the Typhoid fever outbreak.\cite{Wailan}
+
+\section{Factors associated with Typhoid Fever}
+
+The MCET study also provided detailed insight into the risk factors for paediatric typhoid fever in Blantyre. The findings point to complex and varied risks including water sources, household sanitation and hygiene, and social interaction patterns such as school attendance.\cite{Gauld2019b} Cooking and cleaning with water from an open dug well was also identified as a risk factor. Sources of drinking water were found not to be associated with typhoid. Potential explanation was that communities are aware of the risks associated with drinking unclean water, but less aware of the risks of indirect exposure, such as through pans or other items that may come into contact with food. Another explanation was that people may prioritize safe water for drinking but cannot afford to purchase or transport the volume of safe water needed for use in other household tasks. It is estimated that  less than 5\% of the Blantyre city population is connected to the sewage network, with the majority of the population utilizing pit latrines \cite{NSO}\\
+
+Open dug wells and nearby rivers used for cooking and cleaning water may become contaminated with runoff from pit latrines, particularly during rain events, providing a plausible epidemiological link. The study also found out that the risk of typhoid increases when using multiple drinking water sources.
+
+\section{Spatial-genomic analysis of Salmonella Typhi in Blantyre}
+
+Spatial-genomic data analysis of the MCET study data was done to find out if it can help shade more light on the transmission routes of the disease. A Poisson log-linear model was used to model Typhoid incidences across the city, initially with the assumption of no spatial dependence. Covariates used in the model include distance to Queen Elizabeth Central Hospital (QECH), elevation and river catchment at the centroid of the Enumeration Area (EA), and average household size and population density per square km across the enumeration area.\\
+
+The analysis revealed a heterogenous distribution of Salmonella typhi isolates across the city.\cite{Gauld2021} The practical range of spatial correlation was approximately 192 meters, indicating the model’s spatial random effect was capturing short-distance spatial correlation. Although the city$'$s geographical range spans approximately 20 kilometres, households in the cohort are clustered. 59\% of the cohort has another cohort member within a distance of 192 meters, and 13 households that were geolocated reported more than one case.  A significant correlation between spatial and genetic distance was subsequently found, showing typhoid fever patients living closer together were more likely to have S. Typhi isolates with closely related genomes.
+
+\section{Point Pattern Analysis}
+
+Point pattern analysis focuses on describing patterns of points over space and time, and making inference about the process that could have generated an observed pattern. The main focus lies on the information carried in the locations of the points, and typically these locations are not controlled by sampling but as a result of a process of interest like Typhoid Fever case. Point pattern analysis is different from geostatistical processes where the main interest is not in the observation locations but in estimating the value of the observed phenomenon at unobserved locations. Point pattern analysis typically assumes that for an observed area, all points are available, meaning that locations without a point are not unobserved as in a geostatistical process, but are observed and contain no phenomenon of interest. In point processes, locations are treated as random variables, where as in geostatistical processes, the measured variable is a random variable on a fixed locations.
+
+\section{Problem Statement}
+
+To the knowledge of the researcher, there is no past research on Typhoid Fever epidemic using point process as its modelling framework. Sometimes, descriptive statistics may not be enough to fully understand the dynamics of the point process up until a spatio-temporal point process models are developed. The spatio-temporal point process models estimate an intensity function which predicts the rate of events in space and time.\\
+
+The simplest case of these class of models is the homogeneous Poisson process where the intensity is constant in space and time. A more 
+flexible inhomogeneous model is the log-Gaussian Cox process in which the log intensity is assumed to be drawn from a Gaussian process.\cite{Diggle2014} With a suitable choice of spatio-temporal correlation function, the underlying
+Gaussian process can be estimated. It is also statistically prudent to model both the population density and risk as continuous phenomena in time and space while recognising, firstly that the available data will be spatially incomplete and/or aggregated as well as susceptible to measurement error, and
+secondly that even after modelling the effects of all candidate variables, there will often be a
+residual component of spatio-temporal variation in risk that can only be captured by including
+in the model one or more latent, spatio-temporal stochastic processes.\\
+
+Other classes of spatio-temporal models have been used to analyse Salmonella infections in farm animals like dairy cattle. \cite{Fenton} \cite{Cox} In these studies, Markov Chain model with transition probabilities and generalized linear spatial model were used to estimate the spatial and temporal patterns of the Salmonella infections in dairy herds. Ripley’s K function was used to statistically identify disease clusters. The limitation of these modelling framework is that they do not incorporate the presence of a population at risk and a combination of environmental and individual characteristics that affect the risk of disease at each location in space and time in the model. Spatio-temporal point pattern process, which will be used in this project, was used to analyse the spread of Avian Influenza Virus (H5N1) in Turkey. The intensity function which was used was based on a self exciting point process framework which has successfully been used for modelling earthquakes.\cite{Kim} \cite{Ogata} \\ 
+
+All the previous analyses on S. Typhi in Blantyre, Malawi did not look at the spatio-temporal point pattern signals of the sub-lineages of H58 of S.Typhi. This project, which will use the MCET dataset to fit spatial and spatio-temporal point pattern statistical models of the 7 sub-lineages of H58 lineage of S. Typhi using a log-Gaussian Cox Process as its modelling framework. 
+
+\section{Objectives of Study}
+The following are the objectives of the study:
+
+\subsection{Overall Objective}
+To conduct spatial and spatio-temporal analysis of the 7 sub-lineages of H58 Salmonella Typhi lineage.
+
+\subsection{Specific Objectives} 
+
+\begin{enumerate}
+\item To describe the spatial variations of the distribution of typhoid cases by sub-lineage
+
+\item To describe the temporal variations of the distribution of typhoid cases by sub-lineage
+
+\item To investigate the existence of spatial and/or temporal interactions of the 7 sub-lineages among typhoid cases
+
+\end{enumerate}
+
+\section{Research Questions}
+
+Based on the exploratory data analysis and the findings from the MCET study, this project will be guided by the following research questions:
+
+\begin{enumerate}
+\item What is the spatio-temporal distribution for typhoid cases in Blantyre?
+\item Are there differences in spatial and temporal distributions between sub-lineages?
+\item Is there evidence for interactions (competition, synergy) between sub-lineages?
+\end{enumerate}
+
+\section{Hypothesis of the Study}
+
+The null hypothesis of the study is that all the 7 sub-lineages are part of a generalized epidemic as opposed to at least one of the sub-lineages to have a distinct spatio-temporal distribution.
+
+\section{Significance of the Study}
+
+Public health interventions for typhoid are challenging because typhoid fever incidences are often dynamic in space and time, and transmission routes are not consistent across locations and time. The results of the spatio-temporal point process model will, in general, add new knowledge to the existing body of knowledge about typhoid fever and specifically explain further the transmission routes of the H58 lineage in Blantyre, Malawi. The results would also help to develop targeted public health intervention to prevent the re-emergence of the outbreak in future. \\
+
+The Ministry of Health (MoH) can also benefit from the spatio-temporal point process modelling framework as it can be used to identify spatio-temporal clusters of other infectious diseases so that the Government of Malawi (GoM) can use its limited resources efficiently by prioritizing assistance to where and when it is needed most in the fight to control future disease outbreaks.
+
+
+\begin{center}
+\chapter{LITERATURE REVIEW}
+\end{center} 
+
+\section{Introduction}
+
+The chapter will review some of the main concepts which are used in spatial and spatio-temporal modelling. The chapter will also review the available literature on spatio-temporal modelling including point process spatio-temporal modelling of infectious diseases.
+
+\section{Spatial and Spatio-Temporal Modelling Concepts}
+
+The section will present some of the key concepts used in spatial and spatio-temporal point process modelling
+
+\subsection{Stochastic Process}
+ 
+A stochastic process is a family of random variables $\lbrace X(t):t\in T \rbrace$, where $t$ denotes observed time and $T = \left[ 0,K \right]$ denotes discrete positive time sample space or $T = \left[ 0,\infty \right]$ denotes continuous positive time sample space. The collection of all the realizations of the stochastic process $X(t)$ is known as the ensemble. The ensemble of the stochastic process is said to be stationary if $p(X(t_1),...,X(t_n)) = p(X(t_1 + \tau),...,X(t_n + \tau))$ for all $\tau$. This means that the joint probabilities of $X$ at different times are independent of the reference point $\tau$. Ergodicity is another important property of certain stochastic processes which states that averages over the ensemble of values taken at a fixed time can be replaced by an average over time on any sample function from the stochastic ensemble.\\
+
+The basic idea of the process modelling is to construct a model of a process starting from a set of sequences of events typically generated by the process itself. Subsequently, the model could be also used to discover properties of the process, or to predict future events on the basis of the past history. From a general point of view, a model can be used for three main purposes: describing the details of a process, predicting its outcomes, or for predicting a single variable, which takes values in a finite unordered set, given some input data. Against the deterministic model, which predicts outcomes with certainty, with a set of equations that describe the system inputs and outputs exactly, a stochastic model represents a situation where uncertainty is present. In other words, it’s a model for a process that has some kind of randomness. 
+
+\subsection{Spatial Point Process}
+
+A spatial point process is a stochastic mechanism that generates a countable
+set of events $s_i$
+in the plane.\cite{Diggle2014} A spatial point process can also be defined as a stochastic process governing the location of events ${s_i}$ in some set $D_s \subset \mathbb{R}^2$, where the number of such events in $D_s$ is also random. \cite{CressieWikle2011} 
+
+\subsection{Temporal Point Process}
+
+A temporal process is defined as ${\textbf{Y}(t): t \in T^+}$, where $t$ indexes the positive time of the possibly multivariate process \textbf{Y}(.) and $T^+$ is a subset of $\mathbb{R}^+$. The process \textbf{Y} may be deterministic or stochastic.\cite{CressieWikle2011} A marked temporal point process is when, apart from time, additional attributes are also being observed. For instant, apart from time of registration of typhoid cases, temperature of each patient can also be observed.\cite{CressieWikle2011}
+
+\subsection{Spatio-Temporal Point Process}
+
+Mathematically, a spatio-temporal point process is defined as a mechanism which generates countable set of events $D_{s,t}$ in  $\mathbb{R}^2 * \mathbb{R^+}$. Suppose $T$ denotes the largest time in the sample space; then there exists a set of spatio-temporal point process realisations $D_{s,t}$ in  $\mathbb{R}^2 * \mathbb{R^+}$ such that $D_{s,t} \subset D_s * [0,T]$.\cite{CressieWikle2011} An intensity function of a spatio-temporal point process, denoted as $\lambda (s,t)$, is the mean number of events per unit area and time. The intensity of a a point process is fundamental in understanding the pattern of the realisation of the point process.
+
+\subsection{Marked Spatio-Temporal Point Process}
+
+Spatio-temporal point process may be marked if features of events beyond their time and location are also observed. Mathematically, Reinhart (2018) \cite{Reinhart2018}, presented the marked spatio-temporal point process  as a point process of event ${(s_i,t_i,k_i)}$, where $s_i \in X \subseteq \mathbb{R}^d, t_i \in [0,T)$, and $k_i \in K$, where $K$ is the mark space. A special case is the multivariate point process in which the mark space is a finite set ${1,...,m}$ for a finite integer $m$. Often the mark in a multivariate point process indicates the type of each event, such as the sub-lineages of H58 lineage of S. Typhi. A point process has independent marks if given the locations and times ${(s_i,t_i)}$ of events, the marks are mutually independent of each other and the distribution of $k_i$ depends only on ${s_i,t_i}$.\cite{Reinhart2018}
+
+\subsection{Poisson Process}
+
+A spatial point process is said to be a homogeneous Poisson process when its intensity, $\lambda$, is constant across the a bounded region $A$. In most cases, a homogeneous Poisson model is used as a null model against which spatial point patterns are compared. On the other hand, an inhomogeneous Poisson process assumes a nonconstant intensity function within a bounded region.
+
+\subsection{Poisson Cox Process}
+
+A Cox process is defined as a "doubly stochastic"  because it is an inhomogeneous Poisson process with a random intensity function. A spatio-temporal Cox process is a spatio-temporal Poisson process whose intensity is a realization of a spatio-temporal stochastic process $\Lambda(s,t)$. A Cox process inherits the second-order properties of its stochastic intensity function. That means when $\lambda(s,t)$ is stationary with mean $\lambda$ and covariance function 
+
+\begin{center}
+$\gamma(u,v) = Cov [\lambda(s,t), \lambda(s-u,t-v)]$
+\end{center}
+
+then the $K-$function of the corresponding Cox process models is the log-Gaussian class for which $\lambda(s,t) = exp \lbrace Z(s,t)\rbrace$, where $Z(s,t)$ is the Gaussian process. Cox processes provide natural models
+when the point process in question arises as a consequence of environmental variation in
+intensity that cannot be described completely by available explanatory variables, rather
+than through direct, stochastic interactions among the points themselves.
+
+\subsection{Gaussian Spatio-Temporal Process}
+
+Gaussian processes are characterised by the first two moments. As such, modelling the process involves specifying the mean and the covariance structure. A second-order stationary spatio-temporal process ${\eta(s,t):(s,t))\in \mathbb{R}^d \times \mathbb{R}}$ has a constant first moment and there exists a function $C$ defined on $\mathbb{R}^d \times \mathbb{R}$ such that 
+
+\begin{center}
+$Cov \lbrace \eta(s+h,t+u), \eta(s,t)\rbrace = C(h,u)$
+\end{center}
+
+for $s,h \in \mathbb{R}^d$ and $t,u \in \mathbb{R}$. The function $C$ is called the space-time covariance function of the process. Its margins, $C(.,0)$ and $C(0,.)$, are purely spatial and purely temporal covariance functions respectively. A space-time covariance function is separable if there exists purely spatial and purely temporal covariance functions $C_s$ and $C_t$ such that $C(h,u) = C_s(h) . C_t(u)$ for all $(h,u \in \mathbb{R}^d \times \mathbb{R})$. Non-separable stationary covariance functions are more realistic in real life modelling because they accommodates space-time interactions.
+
+\subsection{Log-Gaussian Cox Process (LGCP)}
+
+The complex nature of spatially and temporally continuous data often calls for sophisticated statistical methodology able to effectively cope with the heterogeneity and/or correlation present. In their seminal paper, Møller et al. (1998) demonstrated the remarkable ease with which we may theoretically decompose the log-Gaussian Cox process (LGCP), and the impressive flexibility possessed by this process with respect to capturing a wide variety of spatial intensity functions on R. This renders
+the LGCP particularly attractive for tackling problems in, for example, geographical epidemiology, and with this motivation, it was subsequently extended to the spatiotemporal setting by Brix and Diggle (2001).\\
+
+According to Davies (2013), LGCP imposes stationarity and isotropy of the Gaussian field. \cite{Davies2013} Stationarity and isotropy of the Gaussian field means $\mu_{\lambda} (x) \equiv \mu_{\lambda}, \sigma^2_{\lambda} (x) \equiv \sigma^2_{\lambda} $ and $r(x_1,x_2;\phi_{\lambda})\equiv r(u;\phi_{\lambda})$ where $u = \parallel x_1 - x_2 \parallel$
+
+The spatial mean of the LGCP 
+
+\begin{center}
+
+$\mathbb{E} \left[ exp \lbrace Y(.)\rbrace \right] = exp\left\lbrace \mu_{\lambda} + \dfrac{\sigma^2_{\lambda}}{2}\right\rbrace = 1 \quad \quad \therefore \mu_{\lambda} = - \dfrac{\sigma^2_{\lambda}}{2}$
+
+\end{center}
+
+The second-order property of the LGCP is given by 
+
+\begin{center}
+
+$\hat{g}_{\lambda}^{inhom} (u) = \lbrace 2 \pi u  \mid W \mid \rbrace^{-1} \displaystyle \sum_{u,v \in X}^{u \neq v} \dfrac{K_h (\parallel u-v\parallel - u)\omega_W(u,v)}{\zeta_{\lambda}(u)\zeta_{\lambda}(v)} ; \quad \quad 0<u<u_{max}$
+
+\end{center}
+
+and
+
+\begin{center}
+
+$\hat{K}_{\lambda}^{inhom}(u) = \mid W \mid^{-1} \displaystyle  \sum_{u,v \in X}^{u \neq v} \dfrac{1\left( \Vert u - v\Vert \leq u \right)\omega_W(u,v)}{\zeta_{\lambda}(u)\zeta_{\lambda}(v)}; \quad \quad 0<u<u_{max}$
+
+\end{center}
+
+where $\zeta_{\lambda}(.)$ is the global spatial intensity, $w_W$ is Ripley's isotropic edge correlation, $u_{max}$ is an upper bound on the distances at which it is able to evaluate the estimators given the size of $W$ and $K_h$ is a univariate smoothing kernel with bandwidth $h$.\\
+
+LGCP assumes a separable correlation structure. This means that the correlation between two points in space–time can be decomposed into purely spatial and purely
+temporal components.\cite{Davies2013} $K$ function or pairwise correlation function (PCF) which is also called $g$ function are the two choices which can be used for parameter estimation for the spatial dependence of the LGCP process.
+
+\subsection{Bayesian Modelling}
+
+Bayes’ theorem states that the posterior distribution, which expresses the probability of a parameter given the data, equals the multiplication of the likelihood function (the probability of the data given the parameters) with the prior probability distribution for these parameters
+divided by the probability of the data. This contrasts with a frequentist approach, which derives parameter estimates from the likelihood alone. The main advantage of the Bayesian approach resides in its taking into account uncertainty in the estimates/predictions, and its flexibility and capability of dealing
+with issues like missing data.\\
+
+Bayesian methods which deals with spatial and spatio-temporal data started to appear around year 2000, with the development of Markov chain Monte Carlo (MCMC)simulative methods. Before that the Bayesian approach was almost only used for theoretical models and found little
+applications in real case studies due to the lack of numerical/analytical or simulative tools to compute posterior distributions. The advent of MCMC has triggered the possibility for researchers to develop complex models on large datasets without the need of imposing simplified structures. An alternative to Markov Chain Monte Carlo (MCMC) simulation is Integrated Nested Laplace Approximation (INLA) simulations. Proponents of INLA argue that MCMC is relatively slow when dealing with complexity models like those which take into account spatial and spatio-temporal structures and those with large datasets. INLA is relatively fast because of its deterministic algorithm which has proven capable of providing accurate and fast results.
+
+\subsection{Type of Spatial Data}
+
+Spatial data are classified into three basic types: \textit{Spatial Point Pattern Data} are when $Y(s)$ is a random vector at a location $s \in \mathbb{R}^d$ where $s$ varies consistently over $D$, a fixed subset of $\mathbb{R}^d$ that contains a $d-$dimensional rectangle of positive volume. The data are in the form of points or events irregularly distributed within a region of space. \textit{Areal Spatial Data} are when $D$ is a fixed subset (of either regular or irregular shape) but partitioned into a finite number of areal units with well-defined boundaries.\\
+
+Areal data are also called lattice data or aggregated data. Aggregated data usually consist of data which has been summarised into means of areal units which contain individuals that are close together. According to Tranmer and Steel(1998), data aggregation process leads to loss of information about individual location and variation within groups. This means that the analysis of the aggregated data cannot be used to infer individual relationships. Since the boundaries of the groups are imposed and not natural, results of the analysis can change when boundaries change. Mathematically, lattice data can be defined as $\textbf{Z} \equiv {Z(s_1),...,Z(s_m)}$, where ${s_1,...,s_m}$ are reference locations for data defined on discrete spatial features.\cite{CressieWikle2011}
+
+\section{Spatial and Spatio-Temporal Modelling Approaches}
+
+This section will review available literature on spatial and spatio-temporal modeling approaches of infectious diseases.
+
+\subsection{Spatial Poisson Log-linear Model}
+
+Gauld et al (2021) analysed the MCET study data using a Poisson log-linear model to explore the typhoid fever incidence across Blantyre city. Initially, the model assumed no spatial dependence. The model also utilized available covariates for each enumeration area (EA) namely, distance to QECH, elevation and river catchment at the centroid of the EA, and average household size and population density per square km across the enumeration area. For each enumeration area, age was stratified in classes of less than 5 years, 5 to 14 years and 15 years and above. incidence rates were then explored in each enumeration area $(i)$ and age band $(j)$ and $d_j'\beta$ represented enumeration area-specific predictors, $a_j$ represented age-band specific intercepts, and $N_{ij}$ represented age-band and enumeration area-specific offsets.\cite{Gauld2021}
+
+\begin{center}
+$Y_{ij} \sim Poisson(\mu_{ij})$ \\
+$\mu_{ij} = N_{ij}exp(a_j + d_j'\beta)$
+\end{center}
+
+\subsection{Epidemic Avian Influenza (EAI) Model}
+
+Kim (2011) used adapted a self exciting point process introduced by Hawkes et al\cite{Hawkes&Oakes1974} to implement a point process spatio-temporal model to describe the distribution of the Avian Influenza in Turkey\cite{Kim}. Hawke's self-exciting point process features an inhomogeneous point process with an intensity conditioned on the past history which takes
+the form:
+
+\begin{center}
+$\lambda(t \mid H_t) = \dfrac{E\left[ N(dt) \mid H_t \right] }{dt} = \mu(t) + \sum_{i:t_i<t}g(t=t_i)$
+\end{center}
+
+The intensity function of the self-exciting point process conditional to the past history of time and space of the Epidemic Avian Influenza (EAI) model was defined as follows:
+\begin{eqnarray*}
+\lambda(x,y,t \mid H_t) &=& \dfrac{E\left[ N(dt dx dy) \mid H_t\right]}{dt dx sy}\\
+&=& \lambda_B(x,y,t) + \sum_{i:t_i<t}\alpha f(x - x_i, y-y_i) g(t - t_i) h_{traff}(x,y)k(T(t_i))
+\end{eqnarray*}
+
+where $i$ is an index for each of the 221 H5N1 outbreaks occurred in Turkey during 182 days
+between October 1, 2005 to March 31, 2006. $(x_i, y_i, t_i)$ represents the location and time of an outbreak $i$ and $H_i = {x_i, y_i, t_i ; t_i < t}$ represents the past history of outbreaks up to time $t$. The subscripts $B$ and $T$ of the conditional intensity represents background and triggering respectively.\\
+
+The background conditional intensity was defined as $\bf(\lambda_B(x,y,t)) = ae^{-bR_{city}(x,y)} e^{-kT(t)}$ representing the background intensity and has two components one for space and the other for temporal patterns of the outbreaks. Backfitting, Expectation Maximization (EM) and Poorman's EM methods were used for parameter estimation of the EAI model.\cite{Kim}
+
+\subsection{Spatio-Temporal Interaction Effects Model for Zika Virus Disease (ZVD) and Dengue Fever}
+
+Bello (2018) estimated the parallel relative risk of Zika virus disease (ZVD) and
+dengue fever using spatio-temporal interaction effects models for one department and one city of Colombia during the 2015-2016 ZVD outbreak. The model was fitted using the integrated nested Laplace approximation (INLA) for parameter estimation\cite{Bello2018}.
+
+\subsection{Log-Gaussian Cox Process Model for Ambulance Calls in Northern Sweden}
+
+LGCP has also been used to model spatio-temporal point process the intensity function of ambulance calls in Sweden\cite{Bayisa}. Kernel smoothing based on a quartic kernel was used to describe purely spatial intensity and Poisson regression model was used to estimate purely temporal intensity using the iteratively reweighted least squares method using a function \textit{glm} in the R package \textit{stats}. The spatiotemporal LGCP-prediction was done using the function \textit{lgcpPredict} in the R package \textit{lgcp}. The function computes the Monte Carlo mean
+and variance of the Gaussian random field and the mean and variance of the exponential of the
+Gaussian random field for each of the grid cells and time intervals of interest.
+
+\subsection{Multivariate log-Gaussian Cox Process Model for Modelling Bovine Tuberculosis (BTB)}
+
+BTB, an infectious disease, is endemic in some parts of the United Kingdom. As part
+of a national control strategy for the disease, herds undergo regular inspection. In a study done in 2013, whole genome sequencing was done on the tuberculosis bacterium that caused the outbreak. Diggle et al. (2013) modelled the marked point process pattern data using a multivariate log-Gaussian process as below
+
+\begin{center}
+$X_k(s) = Pois \lbrace R_k(s)\rbrace$\\
+$R_k(s) = C_A \lambda_k(s) exp \lbrace Z_k(s)\beta_k + Y_k(s) + Y_{K+1}(s)\rbrace \quad \quad k \in 1,...,K$
+\end{center}
+
+where $X_k(s)$ is the number of events of type $k$ in the computational grid cell containing the point $s$, $R_k(s)$ is the Poisson rate, $C_A$ is the cell area, $\lambda_k(s)$ is a known offset, $Z_k(s)$ is a vector of measured covariates and $Y_i(s)$ where $i = 1,...,K+1$ are latent Gaussian processes on the computational grid.\\
+
+The other parameters in the model are $\beta_k$, the covariate effects for the $k-$th type; and $\eta = {log(\sigma_i), log(\phi_i)}$, the parameters of the process $Y_i$ for $i = 1,...,K+1$ on an appropriately transformed scale - in this case log. The model for $k-$th data stream (type) is a log-Gaussian Cox Process in which the stochastic part is composed of two elements: a within-stream and a between-stream component. The model allows decomposition of the spatial variation in events of multiple types into variation associated with a particular type of event and variation common to all types. Thus, although each point type may display an individual spatial pattern, the process $Y_{K+1}$ captures area of high or low intensity that are common to all types.
+
+\begin{center}
+\chapter{METHODOLOGY}
+\end{center} 
+
+This chapter discusses the methodology used in this study including the study design, data collection and model fitting.
+
+\section{Study Design}
+
+The data used in this project is from MCET study which was conducted between March 2015 and December 2016 at QECH. The hospital provides free secondary
+healthcare to the Blantyre urban area and surrounding
+district and tertiary care to the southern region of Malawi. Since 1998, the Malawi-Liverpool Wellcome Programme conducted
+sentinel surveillance of bloodstream infections at
+QECH since 1998\cite{Musicha}. Patients living in Blantyre who had
+blood culture–confirmed typhoid fever diagnosed between
+April 2015 and January 2017 at QECH were included in a prospective
+observational cohort. Age, residential area, human
+immunodeficiency virus (HIV) status, inpatient versus outpatient
+treatment, clinical presentation, complications, and deaths
+were recorded from clinical case records and/or during patient
+interviews.
+
+\section{The MCET Data}
+
+549 blood culture-confirmed typhoid fever cases, under the age of 10 years, who resides in urban Blantyre have been used in this project. Out of these, 310 cases consented to have the geolocation of their house recorded by field
+team during household visits, using Garmin Etrex 30 GPS devices. Beginning in August 2015, the electronic PArticipant Locator application (ePAL), a tablet-based geolocation system, was used to remotely geolocate the households for the remainder of the cohort. Out of the 310 cases, 255 cases were whole genome sequenced.\\
+
+The MCET study data which has been used for analysis were stored in 7 different datasets. The datasets were explored to determine which variables to use for merging the 7 datasets into one dataset. The final dataset had 8 variables which were used to merge the 7 datasets. Out of the 8 variables, only three were used in the analysis. These three are hh-LAT = household latitude, hh-LNG = household longitude and Lineage = the genomic sub-lineage of the H58-haplotype of Salmonella Typhi. There are 7 sub-lineages which were coded as major0, major1, major2, major3, major4, major5 and major6. These represents major branches of the genomic tree of the H58-haplotype of the multi-drug resistant Salmonella Typhi.
+
+
+\section{Statistical Analysis and Model Specification}
+
+All statistical analyses were conducted using R statistical software,
+version 4.0.3. Firstly, descriptive analysis was done to summarise the data. Then 4 spatio-temporal models and one spatial multi-type model were fitted using \textit{lgcpPredictSpatioTemporalPlusPars} and \textit{lgcpPredictMultitypeSpatialPlusPars} functions respectively in the R package \textit{lgcp} developed by Taylor et al (2013)\cite{Taylor2013}. Log-Gaussian Cox processes are an important class of models for spatial and spatio-temporal point-pattern data. Delivering robust Bayesian inference for this class of models presents a substantial challenge, since Markov chain Monte Carlo (MCMC) algorithms require careful tuning in order to work well. Below is the definition of the intensity function for the spatio-temporal log-Gaussian Cox process models.
+
+\begin{center}
+$X(s,t) = Pois \lbrace R(s,t)\rbrace$\\
+$R(s,t) = C_A \lambda(s,t) exp \lbrace Z(s,t)\beta + Y(s,t)\rbrace \quad \quad$
+\end{center}
+
+From the model, $X(s,t)$ is the number of events in the cell of the computational grid containing
+the point $s$ at time $t$. $R(s,t)$ is the Poisson rate while $C_A$ is the cell area. $\lambda(s,t)$ is the population offset and $Z(s,t)$ is a vector of measured covariates. $Y(s,t)$ is the latent Gaussian process on the computational grid.  $\beta$ represents the covariate effects. Other model parameters to be estimated includes $\eta = \lbrace log(\sigma),log(\phi),log(\theta) \rbrace$, the parameters of the spatio-temporal Gaussian process $Y(s,t)$.
+
+Below is the intensity function of the multi-type spatial log-Gaussian Cox process model.
+
+\begin{center}
+$X_k(s) = Pois \lbrace R_k(s)\rbrace$\\
+$R_k(s) = C_A \lambda_k(s) exp \lbrace Z_k(s)\beta_k + Y_k(s) + Y_{K+1}(s)\rbrace \quad \quad k \in 1,...,3, K=3$
+\end{center}
+
+In this model, $X_k(s)$ represents the number of events of type $k$ in the computational grid cell containing the point $s$. $R_k(s)$ is the Poisson rate and $C_A$ is the cell area. $\lambda_k(s)$ is the population offset and $Z_k(s)$ is a vector
+of measured covariates and $Y_i(s)$ where $i = 1,...,K+1$ are latent Gaussian processes on the
+computational grid. The other parameters in the model include $\beta_k$, the covariate effects for the $k$th type and $\eta_i = \lbrace log(\sigma_i),log(\phi_i)\rbrace$ the parameters of the process $Y_i$ for $i = 1,...,K+1$ on a log scale.
+
+To achieve convergence of the MCMC, the spatio-temporal models were run 1,000,000 times while the multi-type spatial model was run 20,000,000 time. 
+
+\section{Study Outcomes}
+
+The outcome variable of this study is the intensity function which governs incidence rate of typhoid fever in Blantyre city in both time and/or space. Population density for Blantyre city has been used as an offest and no other covariates were included in the models.
+
+\section{Ethical Consideration}
+
+The data used in this project was approved by the University of Malawi, College of
+Medicine Research and Ethics Committee (no. P.08/14/1617),
+the Liverpool School of Tropical Medicine Research Ethics
+Committee (no. 14.042), and the Lancaster University Faculty of
+Health and Medicine Ethics Committee (no. FHMREC17014). Informed written consent was sought
+from adult participants and from the legal guardians of children whose data have been used in this paper.
+
+\begin{center}
+\chapter{RESULTS AND DISCUSSION}
+\end{center} 
+
+This chapter presents and discusses the results of the fitted models that have been obtained from the study analysis. Section 4.1 presents the exploratory data analysis, section 4.2 presents the results of the fitted models, and section 4.3 presents model assumptions and assessment.
+
+\section{Exploratory Data Analysis}
+
+The final merged MCET dataset which has been used in this project had 549 observations. Out of these, 316 cases had spatial information while 540 cases had temporal information. 310 cases had both spatial and temporal information and 255 of the 310 cases had genomic information. Figure 4.1 shows the data set merging process.\\
+
+\begin{table}[h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lcrrrrrrrrr}
+\toprule
+variable & Level & n & \% & Missing & \% & Mean & SD & Median & Minimum & Maximum\\
+\midrule
+pid\_tccb & - & 543 & 98.9\% & 6 & 1.1\% & - & - & - & - & -\\
+pid\_epal & - & 275 & 50.1\% & 274 & 49.9\% & - & - & - & - & -\\
+bcnumber & - & 542 & 98.7\% & 7 & 1.3\% & - & - & - & - & -\\
+Date & - & 540 & 98.4\% & 9 & 1.6\% & - & - & - & - & -\\
+Latitude & - & 316 & 57.6\% & 233 & 42.4\% & -15.79 & 0.04 & -15.78 & -15.87 & -15.70\\
+Longitude & - & 316 & 57.6\% & 233 & 42.4\% & 35.04 & 0.03 & 35.03 & 34.97 & 35.10\\
+Lineage & - & 255 & 46.4\% & 294 & 53.6\% & - & - & - & - & -\\
+ & Clade 0 & 132 & 51.8\% & - & - & - & - & - & - & -\\
+ & Clade 1 & 14 & 5.5\% & - & - & - & - & - & - & -\\
+ & Clade 2 & 47 & 18.4\% & - & - & - & - & - & - & -\\
+ & Clade 3 & 14 & 5.5\% & - & - & - & - & - & - & -\\
+ & Clade 4 & 9 & 3.5\% & - & - & - & - & - & - & -\\
+ & Clade 5 & 15 & 5.9\% & - & - & - & - & - & - & -\\
+ & Clade 6 & 24 & 9.4\% & - & - & - & - & - & - & -\\
+\bottomrule
+\end{tabular}}
+\captionof{table}{Summary of MCET Data}
+\end{table} 
+
+\begin{figure}[h]
+\includegraphics[width=\linewidth]{MCET_Project_Data_Merging_Flow_Diagram.png}
+\captionof{figure}{Flow diagram for the data merging process}
+\end{figure}
+
+Table 4.1 summarises the variables in the merged data. The variables used for the spatial and spatio-temporal analysis are \textit{Date} which is a date variable, and \textit{Latitude} and \textit{Longitude} which are latitude and longitude variables. The variable \textit{Lineage} records genomic data. The patient and sample ID variables (pid\_tccb, pid\_epal and bcnumber) were used for merging the different data sets.\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\linewidth, height = 80mm]{Cumulative Cases Over Time (All Cases) and Cumulative Cases Over Time By Sub-Lineage.png}
+\end{center}
+\captionof{figure}{Top: Cumulative Cases Over Time. Bottom:Cumulative Cases Over Time By Sub-Lineage}
+\end{figure}
+
+Figure 4.2 (Top) shows the cumulative frequency of the cases during the study period. The first case was
+recruited on 28th March 2015. The last case was recruited on 30th December 2016. Number of cases per day ranged from 1 to 6 cases. The figure shows that there was a steady increase of Typhoid Fever cases across the study period. Figure 4.2 (Bottom) shows the cumulative frequency of the 255 typhoid fever cases for which whole genome
+sequencing (WGS) was performed. The Clade 0 and Clade 2 were registered consistently throughout the
+study period. Cases for Clade 4 sub-lineage started appearing from January 2016. \\
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height = 70mm]{Sub-lineage.png}
+\end{center}
+\captionof{figure}{Barplot of H58 Genomic Sub-Lineages for Salmonella Typhi}
+\end{figure}
+
+The Figure 4.3 shows the frequency distribution of the typhoid fever cases by sub-lineage. The figure shows that Clade 0 was the most common genomic sub-lineage representing 52\% of the reported cases followed by Clade 2 at 18\%. The other sub-lineages had few cases,as such, they were merged for modelling purposes.
+
+\section{Markov chain Monte Carlo Diagnostics}
+
+This section will discuss some of the techniques which were used to assess the validity of the fitted models for inference. These diagnostic techniques include log-target, trace plots and autocorrelation plots. Metropolis-adjusted Langevin algorithm
+(MALA) length for all the four spatio-temporal models was 1 million iterations. Burn-in was one hundred thousand. Every 90th sample was retained. However, to achieve the desired convergence and minimise autocorrelation, the MALA length for the multi-type spatial model was 40 million iterations with 500,000 burn-in iterations and 18,000 as the thinning parameter.
+
+\subsection{Log-target}
+
+Log target is a model diagnostic technique which is used to check whether the Markov chains of the model being fitted is mixing will. The log target also checks convergence of the Markov chains to a posterior mode. The technique assesses the plot of $log\lbrace \pi\left( \beta, \eta, Y \mid X \right) \rbrace + c$ up to an additive constant $c$
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Log Target Plot - ST - All Cases.png}
+\end{center}
+\captionof{figure}{Plot of the log posterior over the duration of the MCMC run and burn-in for the spatio-temporal model for all cases}
+\end{figure}
+
+Figure 4.4 shows that the log-target of the Markov chain started with values near $0$ but quickly converged around $-110000$. The convergence of the log-target means that the Markov chain is mixing well and the parameters of the fitted model can be used for inference. Figure 4.5 also shows that the log-target of the Markov chain of the multi-type spatial model converge at around $-35000$. The other three spatio-temporal models have similar convergence of their log-targets. For more details, see Appendix 1.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Log Target - Multi-type.png}
+\end{center}
+\captionof{figure}{Plot of the log posterior over the duration of the MCMC run and burn-in the multi-type spatial model}
+\end{figure}
+
+\subsection{Trace Plots}
+
+Another intuitive and easily implemented diagnostic tool is a trace plot
+which plots the parameter value of the model at time $t$ against the iteration
+number. If the model has converged, the trace plot will move around the mode of the distribution. Convergence of Markov chain is assumed when trace plots look like fat hairy caterpillar.  However, a clear sign of non-convergence occurs when the plot shows that there is an observable trend in the sample space. Figure 4.6 and figure 4.7 show that all the model parameters for spatio-temporal model with all cases and multi-type spatial model converged. The trace plot of the other three models also formed a fat hairy caterpillar as a sign of convergence. See Appendix 2 for detail.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 70mm]{Traceplots for Beta and Eta - All Cases.png}
+\end{center}
+\captionof{figure}{Traceplots of the model parameters of the spatio-temporal model with all cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 100mm]{Traceplot - Multi-type.png}
+\end{center}
+\captionof{figure}{Traceplots of the model parameters of the multi-type spatial model}
+\end{figure}
+
+\subsection{Autocorrelation in the latent field}
+
+Spatial autocorrelation is the association of a variable with itself through space. When different values occur near one another, negative autocorrelation occurs, whereas when similar values occur near one another, positive autocorrelation occurs. The spatial autocorrelation in the error term of a model causes biased estimation of error variance, but regression coefficients remain unbiased. The results is that the significance tests and measures of model fit may be invalid. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 60mm]{Autocorrelations in the Latent Field - All Cases.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for spatio-temporal model with all cases}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics{Autocorrelation in the latent field - Multi-type.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for multi-type spatial model}
+\end{figure}
+
+Figure 4.8 and 4.9 show how well the MCMC was mixing over the whole computational grid. Initially, there was positive autocorrelation at lag 1 but little to no autocorrelation at lag 15 across the observation window for both spatio-temporal model with all cases and multi-type spatial model. This shows that there is very little autocorrelation in the sampled values of the retained latent field. The other three spatio-temporal models also produced similar autocorrelation results. See Appendix 3 for details.
+
+\subsection{Autocorrelation of parameters from the point process}
+
+The spikes of the autocorrelation plot of the parameters of the latent field that are close to zero is evidence against autocorrelation. Figure 4.10 shows that some parameters, $\phi$ and $\theta$ in the spatio-temporal model may be highly correlated, so the MALA algorithm will be slow to explore the entire posterior
+distribution. This can be resolved by increasing the posterior sample of the model by running the MALA algorithm longer. Since the autocorrelation is not severe at lag 40 for $\theta$ and the rest of the parameters show no autocorrelation, there is no need to run the MCMC longer. The other spatio-temporal models also show similar results. See Appendix 4 for  details. Figure 4.11, on the other hand, shows no autocorrelation for the multi-type spatial model at different lags in the thinned samples.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics{Autocorrelation of Beta and Eta - All Cases.png}
+\end{center} 
+\captionof{figure}{Autocorrelation plots of the parameters of the latent field from the spatio-temporal model with all cases}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics{Autocorrelation of Beta and Eta - Multi-type.png}
+\end{center}
+\captionof{figure}{Autocorrelation plots of beta and eta for multi-type spatial model}
+\end{figure}
+
+\section{Log-Gaussian Cox Process Results}
+
+This section will discuss the results of the four spatio-temporal models and one multi-type spatial model which have been fitted using the LGCP framework.
+
+\subsection{Spatio-temporal model with all cases}
+
+This subsection discusses the results of the spatio-temporal model fitted using all Typhoid Fever cases without focusing on their genomic lineage.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+    \toprule
+         Parameter & Median & Lower 95\%  CRI & Upper 95\%  CRI\\ \midrule
+        $\sigma$ & 2.185 & 1.93 & 2.497 \\
+        $\phi$ & 940.1 & 709 & 1275 \\
+        $\theta$ & 7.46$\times10^{-2}$ & 4.952$\times10^{-2}$ & 0.1072 \\
+        $exp(\beta_{Intercept})$ & 8.912$\times10^{-9}$ & 3.038$\times10^{-9}$ & 2.462$\times10^{-8}$ \\
+        $exp(\beta_{Ltt1})$ & 59.81 & 7.31 & 649.9 \\
+        $exp(\beta_{Ltt2})$ & 2.146 & 0.4726 & 9.768 \\
+        $exp(\beta_{Ltt3})$ & 4.144 & 1.16 & 15.98 \\
+        \bottomrule
+    \end{tabular}
+    \captionof{table}{Parameter estimates for the LGCP model with all cases}
+\end{table}
+
+Table 4.2 is the summary of the parameters of the latent field of the spatio-temporal LGCP model with all Typhoid cases. The parameter $\sigma$ had median 2.185 (95\% CRI 1.93 to 2.497); the parameter $\phi$ had median 940.1 metres (95\% CRI 709 to 1275); and the parameter $\theta$ had median 7.46 months $\times10^{-2}$ (95\% CRI 4.952$\times10^{-2}$ to 0.1072). The other parameters, \verb=Ltt1=, \verb=Ltt2= and \verb=Ltt3= are for the cubic spline which was included to assess the long term trend of the model and cannot be interpreted as covariate effects.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Long term trend of temporal model - All Cases.png}
+\end{center}
+\captionof{figure}{Long term trend of Typhoid fever outbreak for all typhoid cases}
+\end{figure}
+
+To ascertain the long term trend of the Typhoid Fever outbreak, a cubic spline was used. The orange graph line of Figure 4.12 describes the trend of the Typhoid fever between March 2015 to December 2016. The figure shows that the Typhoid fever outbreak was at the peak around the months of October and November 2015. Then the cases started decreasing steadily up to July 2016 when it started increasing steadily again. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Exceedance Probabilities - All Cases.png}
+\end{center}
+\captionof{figure}{Exceedance Plot of posterior probability that the relative risk exceeds 2 (left) and 4 (right) for all typhoid cases}
+\end{figure}
+
+Figure 4.13 shows location of high posterior probability  that relative risk exceeds 2 and 4 for all Typhoid fever cases at the last time point. The figure shows that Mbayani, Ndirande, Nkolokoti-Kachere, Chirimba, Bangwe-Namiyango, Mzedi, Manje-Misesa and Nancholi had 4 times higher relative risk of the typhoid fever outbreak than other locations in Blantyre city.
+
+
+\subsection{Spatio-temporal model for Clade 0 sub-lineage}
+
+This sub-section discusses the findings of spatio-temporal model for Clade 0 sub-lineage of H58 lineage of Salmonella Typhi.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+    \toprule
+         Parameter & Median & Lower 95\% CRI & Upper 95\% CRI\\ \midrule
+        $\sigma$ & 2.257 & 1.893 & 2.683 \\
+        $\phi$ & 873.6 & 615 & 1316 \\
+        $\theta$ & 0.1068 & 6.417$\times10^{-2}$ & 0.1747 \\
+        $exp(\beta_{Intercept})$ & 1.28$\times10^{-8}$ & 4.223$\times10^{-9}$ & 3.663$\times10^{-8}$ \\
+        $exp(\beta_{Ltt1})$ & 3.634 & 0.3014 & 52.46 \\
+        $exp(\beta_{Ltt2})$ & 2.912 & 0.4509 & 20.95 \\
+        $exp(\beta_{Ltt3})$ & 1.443 & 0.3212 & 6.102 \\
+        \bottomrule
+    \end{tabular}
+    \captionof{table}{Parameter estimates for the LGCP model for Clade 0 cases}
+\end{table}
+
+Table 4.3 is the summary of the parameters of the latent field of the spatio-temporal LGCP model with Clade 0 Typhoid cases. The parameter $\sigma$ had median 2.257 (95\% CRI 1.893 to 2.683); the parameter $\phi$ had median 873.6 metres (95\% CRI 615 to 1316); and the parameter $\theta$ had median 0.1068 months (95\% CRI 6.417$\times10^{-2}$ to 0.1747). The other parameters, \verb=Ltt1=, \verb=Ltt2= and \verb=Ltt3= are for the cubic spline which was included in the model to assess the long term trend of the Typhoid Fever outbreak with Clade 0 sub\- lineage of H58 Salmonella Typhi. The orange graph line of figure 4.14 shows that cases of Typhoid fever from Clade 0 sub-lineage started increasing since its first registration in April 2015 and reached its first peak in October 2015. The cases started decreasing from December 2015 until they started increasing again from May 2016 up to the end of the study. Clade 0 cases were registered between April 2015 to October 2016.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Long term trend of temporal model - Major 0.png}
+\end{center}
+\captionof{figure}{Long term trend of typhoid fever outbreak for Clade 0 cases}
+\end{figure}
+
+Figure 4.15 shows location of high posterior probability  that relative risk exceeds 2 and 4 for all Typhoid Fever cases caused by Clade 0 sub-lineage of H58 lineage of Salmonella Typhi at the last time point. The figure shows that Mbayani, Ndirande, Nkolokoti-Kachere, Chirimba, Bangwe-Namiyango, Mzedi, Manje-Misesa and Nancholi had 4 times higher relative risk of the Typhoid fever outbreak than other locations in the city.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Exceedance Probabilities - Major 0.png}
+\end{center}
+\captionof{figure}{Exceedance Plot of posterior probability that the relative risk exceeds 2 (left) and 4 (right) for Clade 0 cases}
+\end{figure}
+
+
+\subsection{Spatio-temporal model for Clade 2 sub-lineage}
+
+This sub-section discusses the findings of spatio-temporal model for Clade 2 sub-lineage of H58 lineage of Salmonella Typhi. 
+
+\begin{table}[h]
+    \centering
+     
+    \begin{tabular}{cccc}
+    \toprule
+         Parameter & Median & Lower 95\% CRI & Upper 95\% CRI \\ \midrule
+        $\sigma$ & 2.483 & 1.884 & 3.243 \\
+        $\phi$ & 807 & 501.7 & 1360 \\
+        $\theta$ & 0.3261 & 0.1707 & 0.6065 \\
+        $exp(beta_{Intercept})$ & 3.961$\times10^{-8}$ & 1.074$\times10^{-10}$ & 1.295$\times10^{-5}$ \\
+        $exp(beta_{Ltt1})$ & 0.2223 & 1.283$\times10^{-6}$ & 44367 \\
+        $exp(beta_{Ltt2}$ & 0.3273 & 4.556$\times10^{-3}$ & 24.61 \\
+        $exp(beta_{Ltt3}$ & 0.2341 & 3.564$\times10^{-4}$ & 159.8 \\
+         \bottomrule
+    \end{tabular}
+        \captionof{table}{Parameter estimates for the LGCP model for Clade 2 cases}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Long term trend of temporal model - Major 2.png}
+\end{center}
+\captionof{figure}{Long term trend of typhoid fever outbreak for Clade 2 cases}
+\end{figure}
+
+Table 4.4 is the summary of the parameters of the latent field of the spatio-temporal LGCP model with Clade 2 Typhoid cases. The parameter $\sigma$ had median 2.483 (95\% CRI 1.884 to 3.243); the parameter $\phi$ had median 807 metres (95\% CRI 501.7 to 1360); and the parameter $\theta$ had median 0.3261 months (95\% CRI 0.1707 to 0.6065). The other parameters, \verb=Ltt1=, \verb=Ltt2= and \verb=Ltt3= are for the cubic spline which was included in the model to assess the long term trend of the Typhoid fever outbreak with Clade 2 sub\- lineage of H58 Salmonella Typhi. The orange graph line in figure 4.16 shows that cases of Typhoid fever caused by Clade 2 sub-lineage was highest in September 2015 and has been decreasing steadily during the study period.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Exceedance Probabilities - Major 2.png}
+\end{center}
+\captionof{figure}{Exceedance Plot of posterior probability that the relative risk exceeds 2 (left) and 4 (right) for Clade 2 cases}
+\end{figure}
+
+Figure 4.17 shows location of high posterior probability  that relative risk exceeds 2 and 4 for all Typhoid fever cases caused by Clade 2 sub-lineage of H58 lineage of Salmonella Typhi at the last time point. The figure shows that Mbayani, Ndirande, Nkolokoti-Kachere, Chirimba, Bangwe-Namiyango, Mzedi, Manje-Misesa and Nancholi had 4 times higher relative risk of the Typhoid fever outbreak than other locations in the city.
+
+\subsection{Spatio-temporal model for Clade 1,3,4,5 and 6 sub-lineage}
+
+This sub-section discusses the findings of spatio-temporal model for the genomic Clades which had fewer typhoid cases (Clade 1, Clade 3, Clade 4, Clade 5 and Clade 6). These were merged into a single Clade for model fitting.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+     \toprule
+         Parameter & Median & Lower 95\% CRI & Upper 95\% CRI \\ \midrule
+        $\sigma$ & 2.31 & 1.858 & 2.848 \\
+        $\phi$ & 791.7 & 495.7 & 1264 \\
+        $\theta$ & 0.1785 & 0.1001 & 0.3175 \\
+        $exp(beta_{Intercept})$ & 3.212$\times10^{-9}$ & 5.664$\times10^{-10}$ & 1.323$\times10^{-8}$ \\
+        $exp(beta_{Ltt1})$ & 27.04 & 0.7734 & 1569 \\
+        $exp(beta_{Ltt2})$ & 7.471 & 0.7305 & 86.59 \\
+        $exp(beta_{Ltt3})$ & 3.405 & 0.444 & 31.2 \\
+         \bottomrule
+    \end{tabular}
+    \captionof{table}{Parameter estimates for the LGCP model for merged Clades 1,3,4,5 and 6}
+\end{table}
+
+Table 4.5 is the summary of the parameters of the latent field of the spatio-temporal LGCP model with merged Clades 1,3,4,5 and 6. The parameter $\sigma$ had median 2.31 (95\% CRI 1.858 to 2.848); the parameter $\phi$ had median 791.7 metres (95\% CRI 495.7 to 1264); and the parameter $\theta$ had median 0.1785 months (95\% CRI 0.1001 to 0.3175). The other parameters, \verb=Ltt1=, \verb=Ltt2= and \verb=Ltt3= are for the cubic spline which was included in the model to assess the long term trend of the Typhoid fever outbreak with merged Clades of H58 Salmonella Typhi sub\- lineages. The orange graph line in figure 4.18 shows that cases of Typhoid fever caused by the merged Clades had a steady increase after first registration in March 2015. The Typhoid cases for these sub-lineages were highest between October and November 2015. The cases started decreasing steadily from December 2015 until the end of the study.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Long term trend of temporal model - Major 13456.png}
+\end{center}
+\captionof{figure}{Long term trend of typhoid fever outbreak for the merged Clades}
+\end{figure}
+
+Figure 4.19 is showing the location of high posterior probability that relative risk exceeds 2 and 4 for all Typhoid fever cases caused by the merged sub-lineage Clades of H58 lineage of Salmonella Typhi at the last time point. The figure shows that Mbayani, Ndirande, Nkolokoti-Kachere, Chirimba, Bangwe-Namiyango, Mzedi, Manje-Misesa and Nancholi had 4 times higher relative risk of the Typhoid fever outbreak than other locations in the city.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 50mm]{Exceedance Probabilities - Major 13456.png}
+\end{center}
+\captionof{figure}{Exceedance Plot of posterior probability that the relative risk exceeds 1.5 (left) and 3 (right) for the merged Clades}
+\end{figure}
+
+\subsection{Multi-type spatial model}
+
+This sub-section discusses the findings of the multi-type spatial model for the genomic Clade 0, 2 and the other Clades which had fewer cases and were combined into one Clade.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+         \toprule
+         Parameter & Median & Lower 95\% CRI & Upper 95\% CRI \\ \midrule
+        $\sigma_1$ & 0.8735 & 0.4004 & 1.469 \\
+        $\phi_1$ & 1408 & 897.7 & 2190 \\
+        $\sigma_2$ & 1.293 & 0.6932 & 2.097 \\
+        $\phi_2$ & 1381 & 902.1 & 2142 \\
+        $\sigma_3$ & 1.158 & 0.6036 & 1.774 \\
+        $\phi_3$ & 1390 & 920.4 & 2153 \\
+        $\sigma_4$ & 2.091 & 1.674 & 2.678 \\
+        $\phi_4$ & 1192 & 895.6 & 1645 \\
+        $exp[\beta_1(Intercept)]$ & 5.572$\times10^{-7}$ & 2.266$\times10^{-7}$ & 2.097$\times10^{-6}$ \\
+        $exp[\beta_2(Intercept)]$ & 2.118$\times10^{-7}$ & 7.266$\times10^{-8}$ & 9.731$\times10^{-7}$ \\
+        $exp[\beta_3(Intercept)]$ & 3.667$\times10^{-7}$ & 1.337$\times10^{-7}$ & 1.632$\times10^{-6}$ \\
+         \bottomrule
+    \end{tabular}
+    \captionof{table}{Table of the parameter estimates from the multivariate spatial model} 
+\end{table}
+
+Table 4.6 is the summary of the parameters of the latent field of the multi-type spatial LGCP model for Clade 0, Clade 2 and the Clade for the merged cases. The parameter $\sigma_1$ had median 0.8735 (95\% CRI 0.4004 to 1.469); the parameter $\phi_1$ had median 1408 metres (95\% CRI 897.7 to 2190); the parameter $\sigma_2$ had median 1408 (95\% CRI 897.7 to 2190); the parameter $\phi_2$ had median 1381 metres (95\% CRI 902.1 to 2142); the parameter $\sigma_3$ had median 1.158 (95\% CRI 0.6036 to 1.774); the parameter $\phi_3$ had median 1390 metres (95\% CRI 920.4 to 2153); the parameter $\sigma_4$ had median 2.091 (95\% CRI 1.674 to 2.678); the parameter $\phi_4$ had median 1192 metres (95\% CRI 895.6 to 1645). 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Conditional probability - Multi-type.png}
+\end{center}
+\captionof{figure}{Conditional probability that a point at each location is of a
+particular type: Clade 0 (Left), Clade 2 (Middle), merged Clades (Right)}
+\end{figure}
+
+The left part of Figure 4.22 shows that Clade 0 sub-lineage of the multi-drug resistant H58 lineage of Salmonella Typhi was dominant in the following areas: Chirimba, Kameza-Machinjiri (Area 1), Chilomoni, Likhubula, Mbayani, Nancholi and Bangwe-Namiyango. The middle part shows that Clade 2 was more dominant in Ndirande and part of Chilomoni. The merged Clades, that is Clade 1, Clade 3, Clade 4, Clade 5 and Clade 6 were more dominant in the following areas: Chigumula, Zingwangwa, Mzedi, Mapanga, Nkolokoti, Machinjiri and Kameza-Machinjiri (Area 1).
+
+\begin{center}
+\chapter{CONCLUSION, RECOMMENDATIONS, LIMITATIONS AND AREA FOR FURTHER RESEARCH}
+\end{center} 
+
+\section{Conclusion}
+
+The spatial and spatio-temporal analysis of the H58 lineage of Salmonella Typhi has shown that the Typhoid fever outbreak which occurred between March 2015 and December 2016 were caused by seven different sub-lineages. The long term distribution of the Typhoid cases shows that since the start of the study (March 2015), the outbreak was increasing steadily until around October and November 2015 when the outbreak was at its peak with a range of 15 to 25 cases per month. Then the cases started dropping until July 2016 when the cases started increasing again.\\
+
+The spatio-temporal models have also shown that cases of each sub-lineage had similar temporal trend to the long term trend of all the Typhoid cases combined. The trends cannot be used to assess seasonality because of limited time points. The maximum time points used in the study was 22 points/months. The minimum being 15 points/months.\\
+
+The multi-type spatial LGCP model has also shown that the spatial distribution of the three sub-lineages were distinct for each sub-lineage. Typhoid fever cases caused by Clade 0 sub-lineage were dominant in the western side of Blantyre city. The areas include Chirimba, Kameza-Machinjiri (Area 1), Chilomoni, Likhubula, Mbayani, Chemusa, Nancholi and Bangwe-Namiyango. Clade 2 cases were dominant in Ndirande and the merged Clades were dominant in the eastern side of the city. The areas include Zingwangwa, Chigumula, Mzedi, Mapanga, Machinjiri and Kameza-Machinjiri (Area 1). These results are similar to those observed by Gauld (2019)\cite{Gauld2019a}.\\
+
+The analysis has also shown that the three sub-lineages were competing across the observation window because each sub-lineage was dominant in specific areas where the other sub-lineages were not dominant.
+
+\subsection{Recommendation}
+
+The researcher has made the following recommendations based on the spatial and spatio-temporal LGCP models implemented in this research:
+
+\begin{itemize}
+\item The analysis should be done using data which has more time points. This will help to assess seasonality effects.
+\item Environmental factors like elevation, temperature and closeness to water sources in the model to also assess the effects of these factors 
+\item The Ministry of Health should sensitize the people around areas with high relative risk of Typhoid fever identified in the study.
+\end{itemize}
+
+\subsection{Limitation}
+
+The study failed to assess seasonality as a temporal covariate. This is because the MCET dataset only had 22 time points. The study also failed to fit models for all the 7 sub-lineages because some sub-lineages had very few cases for proper model fitting. That is why other sub-lineages with few cases were merged into a single sub-lineage.
+
+\subsection{Areas for further research}
+
+For further studies, there is need to fit a multi-variate spatio-temporal LGCP model where spatial and temporal relationships and interactions among sub-lineages can be investigated. 
+
+Further studies should also incorporate environmental factors apart from just assessing spatial and temporal factors. The effects of these environmental factors would help to shade more light why some areas had high relative risk of Typhoid fever than the other as found in this study.
+
+\begin{thebibliography}{99}
+
+\bibitem{WHO} WHO. (2014). Antimicrobial resistance: global report on surveillance. World Health Organisation.
+
+\bibitem{Buckle} Buckle GC, Walker CL, Black RE. Typhoid fever and paratyphoid fever: Systematic review to estimate global morbidity and mortality for 2010. J Glob Health. 2012; 2(1):010401. Epub 2012/12/01. doi: 10.7189/jogh.02.010401 PMID: 23198130; PubMed Central PMCID: PMC3484760.
+
+\bibitem{Peters} Peters RP, Zijlstra EE, Schijffelen MJ, Walsh AL, Joaki G, Kumwenda JJ, et al. A prospective study of bloodstream infections as cause of fever in Malawi: clinical predictors and implications for management. Trop Med Int Health. 2004; 9(8):928–34. Epub 2004/08/12. doi: 10.1111/j.1365-3156.2004.01288.xTMI1288 [pii]. PMID: 15304000.
+
+\bibitem{Mweu} Mweu E, English M. Typhoid fever in children in Africa. Trop Med Int Health. 2008; 13(4):532–40. Epub2008/03/04. doi: TMI2031 [pii] 10.1111/j.1365-3156.2008.02031.x. PMID: 18312473; PubMed Central PMCID: PMC2660514. doi: 10.1111/j.1365-3156.2008.02031.x
+
+\bibitem{Gordon} Gordon MA, Graham SM, Walsh AL, Wilson L, Phiri A, Molyneux E, et al. Epidemics of invasive Salmonella enterica serovar enteritidis and S. enterica Serovar typhimurium infection associated with multidrug resistance among adults and children in Malawi. Clin Infect Dis. 2008; 46(7):963–9. Epub 2008/05/01. doi: 10.1086/529146 PMID: 18444810.
+
+\bibitem{Feasey}Feasey NA, Gaskell K, Wong V, Msefula C, Selemani G, Kumwenda S, et al. (2015) Rapid Emergence of Multidrug Resistant, H58-Lineage Salmonella Typhi in Blantyre, Malawi. PLoS Negl Trop Dis 9(4): e0003748. doi:10.1371/journal.pntd.0003748
+
+\newpage
+
+\bibitem{Gauld2019a} Gauld JA, Olgemoeller F, et al. Integrating spatial and genomic data to identify transmission patterns of typhoid fever in Blantyre, Malawi 2019.
+
+\bibitem{Wailan} Wailan AM, Coll F, et al. rPinecone: Define sub-lineages of a clonal expansion via a phylogenetic tree
+
+\bibitem{Gauld2019b} Gauld JS et al. (2019) Domestic River Water Use and Risk of Typhoid Fever: Results From a Case-control Study in Blantyre, Malawi, Clinical Infectious Disease, ciz405, https://doi.org/10.1093/cid/ciz405
+
+\bibitem{NSO} National Statistical Office; Government of Malawi. Welfare monitoring survey. 2011. Available at: http://catalog.ihsn.org/index.php/catalog/2943/download/44499. Accessed 27 January 2022.
+
+\bibitem{Gauld2021} Gauld, Jillian \& Olgemoeller, Franziska \& Heinz, Eva \& Nkhata, Rose \& Bilima, Sithembile \& Wailan, Alexander \& Kennedy, Neil \& Mallewa, Jane \& Gordon, Melita \& Read, Jonathan \& Heyderman, Robert \& Thomson, Nicholas \& Diggle, Peter \& Feasey, Nicholas. (2021). Spatial and genomic data to characterize endemic typhoid transmission. Clinical Infectious Diseases. 10.1093/cid/ciab745. 
+
+\bibitem{Fenton} Fenton SE, Clough HE, Diggle PJ, Evans SJ, Davison HC, Vink WD, French NP. Spatial and spatio-temporal analysis of Salmonella infection in dairy herds in England and Wales. Epidemiol Infect. 2009 Jun;137(6):847-57. doi: 10.1017/S0950268808001349. Epub 2008 Sep 23. PMID: 18808727.
+
+\bibitem{Cox} Cox R, Su T, Clough H, Woodward MJ, Sherlock C. Spatial and temporal patterns in antimicrobial resistance of Salmonella Typhimurium in cattle in England and Wales. Epidemiol Infect. 2012 Nov;140(11):2062-73. doi: 10.1017/S0950268811002755. Epub 2012 Jan 3. PMID: 22214772.
+
+\bibitem{Kim} Kim, H. (2011). Spatio-temporal point process models for the spread of avian inﬂuenza virus (H5N1).UC Berkeley. Retrieved from https://escholarship.org/uc/item/8nc0r19n
+
+\newpage
+
+\bibitem{Ogata} Ogata, Y. (1998). Space-Time Point-Process Models for Earthquake Occurrences. Annals of the Institute of Statistical Mathematics 50 379-402
+
+\bibitem{Diggle2014} Diggle, P (2014) Statistical Analysis of Spatial and Spatio-Temporal Point Patterns
+
+\bibitem{CressieWikle2011} Cressie, N., \& Wikle, C, (2011) Statistics for Spatio-Temporal Data
+
+\bibitem{Tranmer&Steel1998} Tranmer, M., \& Steel, D.G. (1998). Using census data to investigate the causes of ecological fallacy. Envirnment and Planning A, 30, 817-831.
+
+\bibitem{Bello2018} Martínez-Bello DA, López-Quílez A, Torres Prieto A. Spatio-Temporal Modeling of Zika and Dengue Infections within Colombia. Int J Environ Res Public Health. 2018 Jun 30;15(7):1376. doi: 10.3390/ijerph15071376. PMID: 29966348; PMCID: PMC6068969.
+
+\bibitem{Bayisa} Fekadu L. Bayisa, Markus Ådahl, Patrik Rydén, Ottmar Cronie, Large-scale modelling and forecasting of ambulance calls in northern Sweden using spatio-temporal log-Gaussian Cox processes,
+Spatial Statistics,
+Volume 39, 2020, 100471, ISSN 2211-6753, https://doi.org/10.1016/j.spasta.2020.100471.
+
+\bibitem{Honorato2014} Honorato T et al. (2014) Spatial analysis of distribution of dengue cases in Espírito Santo, Brazil, in 2010: use of Bayesian model. Revista Brasileira de Epidemiologia 17, 150–159.
+
+\bibitem{Lowe2011} Lowe R et al. (2011) Spatio-temporal modelling of climate-sensitive disease risk: towards an early warning system for dengue in Brazil. Computers \& Geosciences 37, 371–381.
+
+\bibitem{Hawkes&Oakes1974} Hawkes, A. G. and Oakes, D. (1974). A Cluster Process Representation of a Self-Exciting Process. Journal of Applied Probability 11 493-503.
+
+\bibitem{Diggle2013} P. J, Moraga P, Rowlingson B, Taylor BM (2013). Spatial and Spatio-Temporal LogGaussian
+Cox Processes: Extending the Geostatistical Paradigm." Statistical Science, 28(4), 542{563}
+
+\bibitem{Davies2013} Davies TM, Hazelton ML (2013). "Assessing Minimum Contrast Parameter Estimation for
+Spatial and Spatiotemporal Log-Gaussian Cox Processes." Statistica Neerlandica, 67(4),355{389}.
+
+\bibitem{Taylor2013} Taylor, B.M., Davies, T.M., Rowlingson, B.S., Diggle, P.J., et al., 2013. lgcp: an R package for inference with spatial and
+spatio-temporal log-Gaussian Cox Processes. J. Stat. Softw. 52 (4), 1–40.
+
+\bibitem{Reinhart2018} Reinhart, A. (2018). A Review of Self-Exciting Spatio-Temporal Point Process and Their Applications. Retrieved from https://arxiv.org/pdf/1708.02647.pdf
+
+\bibitem{Ogata} Yosihiko Ogata. Statistical models for earthquake occurrences and residual analysis for
+point processes. Journal of the American Statistical Association, pages 9-27, 1988.
+
+\bibitem{Benerjee2015} Benerjee, S, Carlin, B, Gelfand, A. (2015) Heirarchical Model and Analysis for Spatial Data
+
+\bibitem{Gauld2019} Gauld et al (2019) Domestic River Water Use and Risk of Typhoid Fever: Results From a Case-control Study in Blantyre, Malawi
+
+\bibitem{Lawson2018} Lawson, A. B, (2018) Bayesian Disease Mapping: Hierarchical Modeling in Spatial Epidemiology
+
+Deardon, R., S. Brooks, B. Grenfell, M. Keeling, M. Tildesley, N. Savill,
+D. Shaw, and M. Woolhouse (2010). Inference for individual-level models
+of infectious diseases in large populations. Statistica Sinica 20, 239{261}.
+
+\bibitem{Musicha} Musicha P, Cornick JE, Bar-Zeev N, et al. Trends in antimicrobial resistance in
+bloodstream infection isolates at a large urban hospital in Malawi (1998–2016): a
+surveillance study. Lancet Infect Dis 2017; 17:1042–52.
+
+\end{thebibliography}
+
+\begin{center}
+\chapter{APPENDICES}
+\end{center} 
+
+\section{Supplementary 
+Model Diagnostics}
+
+\subsection{Appendix 1: Log targets}
+
+This subsection presents the log - target plots for the remaining spatio-temporal LGCP models. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Log Target Plot - ST - Major 0.png}
+\end{center}
+\captionof{figure}{Log target plot for the spatio-temporal model for Clade 0}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Log Target Plot - ST - Major 2.png}
+\end{center}
+\captionof{figure}{Log target plot for the spatio-temporal model for Clade 2}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Log Target Plot - ST - Major 13456.png}
+\end{center}
+\captionof{figure}{Log target plot for the spatio-temporal model for Clade 1,3,4,5 and 6}
+\end{figure}
+
+\subsection{Appendix 2: Traceplots}
+
+This subsection presents the traceplots for the remaining spatio-temporal LGCP models. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Traceplots for Beta and Eta - Major 0.png}
+\end{center}
+\captionof{figure}{Traceplots for Beta and Eta for Clade 0 Cases}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Traceplots for Beta and Eta - Major 2.png}
+\end{center}
+\captionof{figure}{Traceplots for Beta and Eta for Clade 2 Cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Traceplots for Beta and Eta - Major 13456.png}
+\end{center}
+\captionof{figure}{Traceplots for Beta and Eta for Clade 1,3,4,5 and 6 Cases}
+\end{figure}
+
+\subsection{Appendix 3: Autocorrelation in the latent field}
+
+This subsection presents plots of the autocorrelations in the latent field for different lags for the remaining spatio-temporal LGCP models. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelations in the Latent Field - Major 0.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for Clade 0 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelations in the Latent Field - Major 2.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for Clade 2 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelations in the Latent Field - Major 13456.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for Clade 1,3,4,5 and 6 cases}
+\end{figure}
+
+\subsection{Appendix 4: Autocorrelation of parameters from the point process}
+
+This subsection presents plots for the autocorrelation of parameters at different lags for the remaining spatio-temporal LGCP models and the multi-type LGCP model. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelation plots of beta and eta - Major 0.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for spatio-temporal model with Clade 0 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelation plots of beta and eta - Major 2.png}
+\end{center}
+\captionof{figure}{Autocorrelations in the latent field at different lags for spatio-temporal model with Clade 2 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Autocorrelation plots of beta and eta - Major 13456.png}
+\end{center}
+\captionof{figure}{Autocorrelation plots of the parameters of the latent field for Clade 1,3,4,5 and 6 cases}
+\end{figure}
+
+\subsection{Appendix 5: Posterior Covariance Function}
+
+This subsection presents posterior covariance function plots for the remaining spatio-temporal LGCP models and the multi-type LGCP model. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Posterior Covariance Function - All Cases.png}
+\end{center}
+\captionof{figure}{Plots of the posterior spatial covariance (Left) and temporal correlation (Right) for the spatio-temporal model with all cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Posterior Covariance Function - Major 0.png}
+\end{center}
+\captionof{figure}{Plots of the posterior spatial covariance (Left) and temporal correlation (Right) for the spatio-temporal model for Clade 0 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Posterior Covariance Function - Major 2.png}
+\end{center}
+\captionof{figure}{Plots of the posterior spatial covariance (Left) and temporal correlation (Right) for the spatio-temporal model for Clade 2 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Posterior Covariance Function - Major 13456.png}
+\end{center}
+\captionof{figure}{Plots of the posterior spatial covariance (Left) and temporal correlation (Right) for the spatio-temporal model for Clade 1,3,4,5 and 6 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Posterior covariance function - Multi-type.png}
+\end{center}
+\captionof{figure}{Posterior covariance function of the multi-type spatial model}
+\end{figure}
+
+\subsection{Appendix 5: Relative Risk}
+
+This subsection presents relative risk plots for the remaining spatio-temporal LGCP models. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Relative Risk Plot - SP - All Cases.png}
+\end{center}
+\captionof{figure}{Relative risk plot for the spatio-temporal model for all cases at every time point}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Relative Risk Plot - SP - Major 0.png}
+\end{center}
+\captionof{figure}{Relative risk plot for the spatio-temporal model for Clade 0 sub-lineage at different time point(months)}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Relative Risk Plot - SP - Major 2.png}
+\end{center}
+\captionof{figure}{Relative risk plot for the spatio-temporal model for Clade 2 sub-lineage at different time point(months)}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Relative Risk Plot - SP - Major 13456.png}
+\end{center}
+\captionof{figure}{Relative risk plot for the spatio-temporal model for Clade 1,3,4,5 and 6 sub-lineage at different time point(months)}
+\end{figure}
+
+\newpage
+
+\subsection{Appendix 6: Standard error of the relative risk}
+
+This subsection presents the standard error of the relative risk plots for the remaining spatio-temporal LGCP models.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Standard Errors Plot - SP - All Cases.png}
+\end{center}
+\captionof{figure}{Standard error plot of the relative risk for the spatio-temporal model for all cases at every time point(months)}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Standard Errors Plot - SP - Major 0.png}
+\end{center}
+\captionof{figure}{Standard error plot of the relative risk for the spatio-temporal model for Clade 0 at different time point (months)}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Standard Errors Plot - SP - Major 2.png}
+\end{center}
+\captionof{figure}{Standard error plot of the relative risk for the spatio-temporal model for Clade 2 at different time point (months)}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Standard Errors Plot - SP - Major 13456.png}
+\end{center}
+\captionof{figure}{Standard error plot of the relative risk for the spatio-temporal model for Clade 1,3,4,5 and 6 at different time point (months)}
+\end{figure}
+
+\newpage
+
+\subsection{Appendix 7: Prior and posterior density plot}
+
+This subsection presents prior and posterior density plots for the remaining spatio-temporal LGCP models.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Prior and posterior density plots - All Cases.png}
+\end{center}
+\captionof{figure}{Prior (continuous curve) and posterior (histogram) distribution for the parameters of the spatio-temporal LGCP model with all cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Prior and posterior density plots - Major 0.png}
+\end{center}
+\captionof{figure}{Prior and posterior density plots for the spatio-temporal model for Clade 0 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Prior and posterior density plots - Major 2.png}
+\end{center}
+\captionof{figure}{Prior and posterior density plots for the spatio-temporal model for Clade 2 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width = 150mm, height = 80mm]{Prior and posterior density plots - Major 13456.png}
+\end{center}
+\captionof{figure}{Prior and posterior density plots for the spatio-temporal model for Clade 1,3,4,5 and 6 cases}
+\end{figure}
+
+
+\subsection{Appendix 8: Inhomogeneous K Function}
+
+This subsection presents Inhomogeneous K function plots for the remaining spatio-temporal LGCP models and the multi-type LGCP model.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics {Inhomogeneous K Function - All Cases.png}
+\end{center}
+\captionof{figure}{Inhomogeneous K Function for all typhoid cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Inhomogeneous K Function - Major 0.png}
+\end{center}
+\captionof{figure}{Inhomogeneous K Function for Clade 0 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Inhomogeneous K Function - Major 2.png}
+\end{center}
+\captionof{figure}{Inhomogeneous K Function for Clade 2 cases}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{Inhomogeneous K Function - Major 13456.png}
+\end{center}
+\captionof{figure}{Inhomogeneous K Function for Clade 1,3,4,5 and 6 cases}
+\end{figure}
+
+\subsection{Appendix 9: R Scripts}
+
+The R codes are too long to be pasted in this document. They can be accessed \href{https://github.com/donkalonga/MSc-Project-spatio-temporal-modelling}{here}
+
+\end{document}
