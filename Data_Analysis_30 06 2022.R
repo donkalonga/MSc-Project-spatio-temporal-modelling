@@ -1,7 +1,7 @@
 ############
 ## SET-UP ##
 ############
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 library(tidyverse)
@@ -16,7 +16,6 @@ library(plyr)
 library(tidyr)
 library(tmap)
 library(matrixStats)
-#library(psych)
 library(data.table)
 library(dataMaid)
 library(PrevMap)
@@ -57,7 +56,6 @@ Merg <- read.csv("Merged_Final_DK_13072020.csv")
 
 # Plotting Bar Graph for Sub-Lineages
 
-#ggplot(data = Merg, aes(x=as.factor(lineage)) + geom_bar(stat = "identity", fill=lineage)
 colnames(Merg)[12] <- 'Lineage'
 Merg$Lineage[Merg$Lineage == "major0"] <- "Clade 0"
 Merg$Lineage[Merg$Lineage == "major1"] <- "Clade 1"
@@ -126,10 +124,10 @@ calcSumStat<-function(Merg,var,lvls=NULL,is.id.var=F,is.date.var=F){
   }
   
   # output the results
+  
   return(res)
 }
 # Read in data frame
-#Merged_Data <- read.csv("Merged_Final_DK_13072020.csv", stringsAsFactors=F)
 
 Merg$bcdate<-mdy(gsub(Merg$bcdate,pattern=" [0-9]:[0-9][0-9]",replacement="")) # reformatting the bcdate variable into a proper date
 
@@ -147,12 +145,11 @@ mVarSum<-data.frame(variable=c("pid_tccb", "pid_epal", "bcnumber", "bcdate", "sa
                     Maximum=NA)
 
 # compute summary statistics for each variable
-mVarSum[mVarSum$variable=="pid_tccb",-c(1:2)]<-calcSumStat(Merg,"pid_tccb",is.id.var=T) # explain the use of -c(1:2)
+mVarSum[mVarSum$variable=="pid_tccb",-c(1:2)]<-calcSumStat(Merg,"pid_tccb",is.id.var=T) 
 mVarSum[mVarSum$variable=="pid_epal",-c(1:2)]<-calcSumStat(Merg,"pid_epal",is.id.var=T)
 mVarSum[mVarSum$variable=="bcnumber",-c(1:2)]<-calcSumStat(Merg,"bcnumber",is.id.var=T)
 mVarSum[mVarSum$variable=="bcdate",-c(1:2)]<-calcSumStat(Merg,"bcdate",is.date.var=T)
 mVarSum[mVarSum$variable=="sample_collected",-c(1:2)]<-calcSumStat(Merg,"sample_collected",is.date.var=T)
-# why is it that the last argument (is.date.var=T) was not used for the two statement below
 mVarSum[mVarSum$variable=="hh_LAT",-c(1:2)]<-calcSumStat(Merg,var="hh_LAT")
 mVarSum[mVarSum$variable=="hh_LNG",-c(1:2)]<-calcSumStat(Merg,var="hh_LNG")
 
@@ -182,10 +179,9 @@ kable(mVarSum, "latex", booktabs = T, col.names = cnames, align = c("l","c",rep(
 ##########################################################################
 
 png(filename="Sub-lineage.png", width = 6, height = 3, units = "in", res = 1800)
-Merg2 <- Merg[!is.na(Merg$Lineage),] #%>% na.omit(lineage)
+Merg2 <- Merg[!is.na(Merg$Lineage),] 
 SubLinPlot <- ggplot(Merg2, aes(x=Lineage, fill = Lineage, cex.names = 0.5)) +
   geom_bar() + xlab("H58 Sub-lineages") + ylab("Count") + theme_classic() + theme(legend.position="none")
-#barplot(table(Merg$lineage), col = "red", ylab = "Frequency",cex.lab=1, cex.axis=1, cex.main=1, cex.names=1)
 print(SubLinPlot)
 dev.off()
 
@@ -212,9 +208,7 @@ for(lvl in sort(levels(factor(Merg$Lineage)))){
     dplyr::mutate() %>%
     dplyr::group_by(Lineage, sample_collected) %>%
     dplyr::filter(Lineage==lvl) %>%
-    #dplyr::arrange(ymd(sample_collected)) %>%
     dplyr::tally() %>%
-    #dplyr::summarise(n=n(), .groups = "drop") %>%
     dplyr::mutate(cs=cumsum(n)) %>% 
     dplyr::ungroup()
   
@@ -229,9 +223,7 @@ g2<-ggplot(dfLineage,mapping=aes(x=ymd(date), y=cs, color=Lineage)) +
   scale_color_manual(values=c("salmon","mediumorchid","orange","greenyellow","burlywood4","steelblue4","darkolivegreen4"), name="H58 Sub-Lineages") + 
   geom_line(lwd=1) + theme_classic() +
   xlab("Date") +
-  ylab("Cumulative Cases") #+
-  #ggtitle("Cumulative case counts over time per sub-lineage.") +
-  #theme(legend.position = "right")
+  ylab("Cumulative Cases")
 
 g2
 ######################################################################################
@@ -246,9 +238,9 @@ dev.off()
 # PLOTTING CUMULATIVE CASES OVER TIME ADJACENT TO GENOMIC SUB-LINEAGES
 #################################################################################
 png(filename="Cumulative Cases Over Time (All Cases) and Cumulative Cases Over Time By Sub-Lineage.png", width = 6, height = 4, units = "in", res = 1800)
-#grid.arrange(g1,g2,ncol=2)
 ggarrange(g1, g2, ncol = 1, nrow = 2)
 dev.off()
+
 ########################################################################################
 # Spatial plots by sub-lineages
 
@@ -260,10 +252,7 @@ g3 <- ggplot(Merg, mapping = aes(x=hh_LAT, y=hh_LNG, color = factor(Lineage))) +
             geom_point() + stat_ellipse() + geom_sf(data=BTShapeF$geometry)
 g3
 
-
 register_google(key = "AIzaSyDjuNQO7WVjfHrInkqE7ZQ06MZyoTB9bS8")
-#register_google(key="AIzaSyAZvE95bIaBBAHcorKibY1P8QcsNKqahKo")
-#BT <- get_map(location = "blantyre")
 BT <- get_map(location = c(lon = 35.041378331851824, lat = -15.772877620991228), zoom = "auto", scale = "auto", maptype = "roadmap", source = "google", force = ifelse(source == "google", TRUE, FALSE))
 Lineage <- Merged_Data$lineage
 qmplot(hh_LNG, hh_LAT, data = Merged_Data, col = Lineage, na.rm = T,xlab = "Lon (deg)", ylab = "Lat (deg)", title = "Spatial Plot by Lineage")
@@ -272,27 +261,28 @@ qmplot(hh_LNG, hh_LAT, data = Merged_Data, col = Lineage, na.rm = T,xlab = "Lon 
 # SPATIO-TEMPORAL MODEL WITH ALL CASES
 ######################################################################
 
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 load("ST_Model_All_Cases_output.RData")
 
 # Relative Risk
 
-png(filename="Relative Risk Plot - SP - All Cases.png", width = 6, height = 5, units = "in", res = 1800)
+png(filename="Relative Risk Plot - SP - All Cases.png", width = 7, height = 7, units = "in", res = 1800)
 par(mar=c(2.1,2.1,1.1,4.1))
 par(mfrow = c(6,4))
-plot(SpatioTemporal_Model_All_Cases, type = "relrisk", cex.axis = 0.5, cex.lab = 0.5, xlab = "", ylab = "") # plotting relative risk of the model for every time point
+plot(SpatioTemporal_Model_All_Cases, type = "relrisk")
 dev.off()
 dev.off()
 
-# Standard Error of the relative risk
+# Standard error of the relative risk
 
-png(filename="Standard Errors Plot - SP - All Cases.png", width = 6, height = 3, units = "in", res = 1800)
+png(filename="Standard Errors Plot - SP - All Cases.png", width = 7, height = 7, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(6,4))
 plot(SpatioTemporal_Model_All_Cases, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
 dev.off()
-
-#plot(SpatioTemporal_Model_All_Cases, type = "intensity" ) # plotting the mean Poisson intensity
+dev.off()
 
 # plotting the log target to check if the chain has converged to a posterior mode
 
@@ -300,9 +290,10 @@ png(filename = "Log Target Plot - ST - All Cases.png", width = 5, height = 3, un
 plot(ltar(SpatioTemporal_Model_All_Cases), type = "s", xlab = "Iteration/90", ylab = "log target")
 dev.off()
 
-#plot(ltar(SpatioTemporal_Model_All_Cases), type = "s", xlab = "Iteration/90", ylab = "log target")
-
 # compute and plot autocorrelations in the latent field
+png(filename = "Autocorrelations in the Latent Field - All Cases.png", width = 5, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,2.1,1.1,5.1))
+par(mfrow=c(1,3))
 lagch <- c(1, 5, 15)
 Sacf <- autocorr(SpatioTemporal_Model_All_Cases, lagch, inWindow = NULL)
 library("fields")
@@ -312,6 +303,7 @@ for (i in 1:3) {
   plot(xyt$window, add = TRUE, ask = FALSE)
   scalebar(5000, label = "5 km")
 }
+dev.off()
 
 # traceplots of beta and eta
 
@@ -341,19 +333,29 @@ latextable(parsum, rownames = rownames(parsum), colnames = c("Parameter", colnam
 
 tt <- seq(1,22, length=1000)
 DataF <- cbind(tt, bs(tt))
-#yy <- area(BTShapeF) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 yy <- sum((polyolay$gridobj$cellarea) * (polyolay$gridobj$cellInside)) * exp(sum(Pop.offset[[1]]$Zm)) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 plotDf <- data.frame(t=tt,Y=yy)
 plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_light() + xlab("Month of the Year (March 2015 = 1)") + ylab("number of typhoid cases per month") + geom_point(data=ltDF,mapping=aes(x=tmu,y=lt),size=2)
 
 # a text summary of the model parameters
+
 textsummary(SpatioTemporal_Model_All_Cases, digits = 4)
 
 # a plot of the prior and posterior densities
+
+png(filename = "Prior and posterior density plots - All Cases.png", width = 5, height = 4, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 priorpost(SpatioTemporal_Model_All_Cases, ask = FALSE)
+dev.off()
 
 # the posterior covariance function
+
+png(filename = "Posterior Covariance Function - All Cases.png", width = 7, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,1.1,1.1,1.1))
+par(mfrow=c(1,2))
 postcov(SpatioTemporal_Model_All_Cases, ask = FALSE)
+dev.off()
 
 # exceedance and lower-tail exceedance probabilities
 
@@ -369,8 +371,10 @@ dev.off()
 
 # Inhomogeneous K-Function
 
-kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
+png(filename = "Inhomogeneous K Function - All Cases.png", width = 6, height = 4, units = "in", res = 1800)
+kin <-KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
 plot(kin)
+dev.off()
 
 # Extracting mean and variance of the latent field
 meanfield(SpatioTemporal_Model_All_Cases)
@@ -384,29 +388,40 @@ serr(SpatioTemporal_Model_All_Cases)
 # SPATIO-TEMPORAL MODEL FOR MAJOR 0 SUB-LINEAGE
 ######################################################################
 
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 load("ST_Model_major0_output.RData")
 
-# plotting the model
+# Relative risk
 
-par(mar=c(4.1,4.1,1.1,4.1))
-par(mfrow = c(1,3))
-
-#plot(SpatioTemporal_Model_major0) # plotting relative risk of the model for every time point
+png(filename="Relative Risk Plot - SP - Major 0.png", width = 7, height = 6, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(5,4))
 plot(SpatioTemporal_Model_major0, type = "relrisk") # plotting relative risk of the model for every time point
-plot(SpatioTemporal_Model_major0, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
+dev.off()
+dev.off()
 
+# Standard error of the relative risk
+
+png(filename="Standard Errors Plot - SP - Major 0.png", width = 7, height = 6, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(5,4))
+plot(SpatioTemporal_Model_major0, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
+dev.off()
+dev.off()
 
 # plotting the log target to check if the chain has converged to a posterior mode
-#plot(ltar(SpatioTemporal_Model_major0), type = "s", xlab = "Iteration/90", ylab = "log target")
 
-png(filename = "Log Target Plot - ST - Major 0.png", width = 6, height = 4, units = "in", res = 1800)
+png(filename = "Log Target Plot - ST - Major 0.png", width = 5, height = 3, units = "in", res = 1800)
 plot(ltar(SpatioTemporal_Model_major0), type = "s", xlab = "Iteration/90", ylab = "log target")
 dev.off()
 
 # compute and plot autocorrelations in the latent field
+
+png(filename = "Autocorrelations in the Latent Field - Major 0.png", width = 5, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,2.1,1.1,5.1))
+par(mfrow=c(1,3))
 lagch <- c(1, 5, 15)
 Sacf <- autocorr(SpatioTemporal_Model_major0, lagch, inWindow = NULL)
 library("fields")
@@ -416,12 +431,23 @@ for (i in 1:3) {
   plot(xyt$window, add = TRUE, ask = FALSE)
   scalebar(5000, label = "5 km")
 }
+dev.off()
 
 # traceplots of beta and eta
+
+png(filename = "Traceplots for Beta and Eta - Major 0.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 traceplots(SpatioTemporal_Model_major0, ask = FALSE)
+dev.off()
 
 # autocorrelation plots of beta and eta
+
+png(filename = "Autocorrelation plots of beta and eta - Major 0.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 parautocorr(SpatioTemporal_Model_major0, ask = FALSE)
+dev.off()
 
 # a summary table of beta and eta
 parsum <- parsummary(SpatioTemporal_Model_major0)
@@ -435,7 +461,6 @@ latextable(parsum, rownames = rownames(parsum), colnames = c("Parameter", colnam
 
 tt <- seq(1,19, length=1000)
 DataF <- cbind(tt, bs(tt))
-#yy <- area(BTShapeF) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 yy <- sum((polyolay$gridobj$cellarea) * (polyolay$gridobj$cellInside)) * exp(sum(Pop.offset[[1]]$Zm)) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 plotDf <- data.frame(t=tt,Y=yy)
 plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_light() + xlab("Month of the Year (April 2015 = 1)") + ylab("number of typhoid cases per month") + geom_point(data=ltDF,mapping=aes(x=tmu,y=lt),size=2)
@@ -445,10 +470,20 @@ plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_
 textsummary(SpatioTemporal_Model_major0, digits = 4)
 
 # a plot of the prior and posterior densities
+
+png(filename = "Prior and posterior density plots - Major 0.png", width = 5, height = 4, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 priorpost(SpatioTemporal_Model_major0, ask = FALSE)
+dev.off()
 
 # the posterior covariance function
+
+png(filename = "Posterior Covariance Function - Major 0.png", width = 7, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(1,2))
 postcov(SpatioTemporal_Model_major0, ask = FALSE)
+dev.off()
 
 # exceedance and lower-tail exceedance probabilities
 
@@ -464,36 +499,48 @@ dev.off()
 
 # Inhomogeneous K-Function
 
-kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
+png(filename = "Inhomogeneous K Function - Major 0.png", width = 6, height = 4, units = "in", res = 1800)
+kin <-KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
 plot(kin)
-
+dev.off()
 
 ######################################################################
 # SPATIO-TEMPORAL MODEL FOR MAJOR 2 SUB-LINEAGE
 ######################################################################
 
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 load("ST_Model_major2_output.RData")
 
-# plotting the model
+# Relative risk
 
-par(mar=c(4.1,4.1,1.1,1.1))
-par(mfrow = c(1,2))
+png(filename="Relative Risk Plot - SP - Major 2.png", width = 7, height = 4, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(3,4))
+plot(SpatioTemporal_Model_major2, type = "relrisk")
+dev.off()
+dev.off()
 
-#plot(SpatioTemporal_Model_major0) # plotting relative risk of the model for every time point
-plot(SpatioTemporal_Model_major2, type = "relrisk") # plotting relative risk of the model for every time point
+# Standard error of the relative risk
+
+png(filename="Standard Errors Plot - SP - Major 2.png", width = 7, height = 4, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(3,4))
 plot(SpatioTemporal_Model_major2, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
+dev.off()
+dev.off()
 
 # plotting the log target to check if the chain has converged to a posterior mode
-#plot(ltar(SpatioTemporal_Model_major2), type = "s", xlab = "Iteration/90", ylab = "log target")
 
-png(filename = "Log Target Plot - ST - Major 2.png", width = 6, height = 4, units = "in", res = 1800)
+png(filename = "Log Target Plot - ST - Major 2.png", width = 5, height = 3, units = "in", res = 1800)
 plot(ltar(SpatioTemporal_Model_major2), type = "s", xlab = "Iteration/90", ylab = "log target")
 dev.off()
 
 # compute and plot autocorrelations in the latent field
+png(filename = "Autocorrelations in the Latent Field - Major 2.png", width = 5, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,2.1,1.1,5.1))
+par(mfrow=c(1,3))
 lagch <- c(1, 5, 15)
 Sacf <- autocorr(SpatioTemporal_Model_major2, lagch, inWindow = NULL)
 library("fields")
@@ -503,12 +550,23 @@ for (i in 1:3) {
   plot(xyt$window, add = TRUE, ask = FALSE)
   scalebar(5000, label = "5 km")
 }
+dev.off()
 
 # traceplots of beta and eta
+
+png(filename = "Traceplots for Beta and Eta - Major 2.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 traceplots(SpatioTemporal_Model_major2, ask = FALSE)
+dev.off()
 
 # autocorrelation plots of beta and eta
+
+png(filename = "Autocorrelation plots of beta and eta - Major 2.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 parautocorr(SpatioTemporal_Model_major2, ask = FALSE)
+dev.off()
 
 # a summary table of beta and eta
 parsum <- parsummary(SpatioTemporal_Model_major2)
@@ -522,7 +580,6 @@ latextable(parsum, rownames = rownames(parsum), colnames = c("Parameter", colnam
 
 tt <- seq(1,15, length=1000)
 DataF <- cbind(tt, bs(tt))
-#yy <- area(BTShapeF) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 yy <- sum((polyolay$gridobj$cellarea) * (polyolay$gridobj$cellInside)) * exp(sum(Pop.offset[[1]]$Zm)) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 plotDf <- data.frame(t=tt,Y=yy)
 plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_light() + xlab("Month of the Year (May 2015 = 1)") + ylab("number of typhoid cases per month") + geom_point(data=ltDF,mapping=aes(x=tmu,y=lt),size=2)
@@ -532,10 +589,20 @@ plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_
 textsummary(SpatioTemporal_Model_major2, digits = 4)
 
 # a plot of the prior and posterior densities
+
+png(filename = "Prior and posterior density plots - Major 2.png", width = 5, height = 4, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 priorpost(SpatioTemporal_Model_major2, ask = FALSE)
+dev.off()
 
 # the posterior covariance function
+
+png(filename = "Posterior Covariance Function - Major 2.png", width = 7, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(1,2))
 postcov(SpatioTemporal_Model_major2, ask = FALSE)
+dev.off()
 
 # exceedance and lower-tail exceedance probabilities
 
@@ -551,44 +618,42 @@ dev.off()
 
 # Inhomogeneous K-Function
 
-kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
+png(filename = "Inhomogeneous K Function - Major 2.png", width = 6, height = 4, units = "in", res = 1800)
+kin <-KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
 plot(kin)
+dev.off()
 
 ######################################################################
 # SPATIO-TEMPORAL MODEL FOR MAJOR 1,3,4,5&6 SUB-LINEAGE
 ######################################################################
 
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 load("ST_Model_major13456_output.RData")
 
-# plotting the model
+# Relative risk
 
-png(filename = "Relative Risk Plot - SP - Major 13456.png", width = 6, height = 5, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,1.1))
+png(filename = "Relative Risk Plot - SP - Major 13456.png", width = 7, height = 6, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
 par(mfrow=c(5,4))
-plot(SpatioTemporal_Model_major13456 , type = "relrisk", xlab = "Eastings", ylab = "Northings")
+plot(SpatioTemporal_Model_major13456 , type = "relrisk")
 dev.off()
 dev.off()
 
 
-png(filename = "Standard Errors Plot - SP - Major 13456.png", width = 6, height = 5, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,1.1))
-par(mfrow=c(5,4))
-plot(SpatioTemporal_Model_major13456 , type = "serr", xlab = "Eastings", ylab = "Northings")
-dev.off()
-dev.off()
+# Standard error of the relative risk
 
-#plot(SpatioTemporal_Model_major13456, type = "relrisk") # plotting relative risk of the model for every time point
-#plot(SpatioTemporal_Model_All_Cases, col=c(0,0.2,0.4,0.6,0.8,1,1.5,2,3))
-#plot(SpatioTemporal_Model_major13456, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
-#plot(SpatioTemporal_Model_All_Cases, type = "intensity" ) # plotting the mean Poisson intensity
+png(filename="Standard Errors Plot - SP - Major 13456.png", width = 7, height = 6, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(5,4))
+plot(SpatioTemporal_Model_major13456, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
+dev.off()
+dev.off()
 
 # plotting the log target to check if the chain has converged to a posterior mode
-#plot(ltar(SpatioTemporal_Model_major13456), type = "s", xlab = "Iteration/90", ylab = "log target")
 
-png(filename = "Log Target Plot - ST - Major 13456.png", width = 6, height = 4, units = "in", res = 1800)
+png(filename = "Log Target Plot - ST - Major 13456.png", width = 5, height = 3, units = "in", res = 1800)
 plot(ltar(SpatioTemporal_Model_major13456), type = "s", xlab = "Iteration/90", ylab = "log target")
 dev.off()
 
@@ -596,7 +661,7 @@ dev.off()
 # compute and plot autocorrelations in the latent field
 
 png(filename = "Autocorrelations in the Latent Field - Major 13456.png", width = 6, height = 4, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,5.1))
+par(mar=c(4.1,2.1,1.1,5.1))
 par(mfrow=c(1,3))
 lagch <- c(1, 5, 15)
 Sacf <- autocorr(SpatioTemporal_Model_major13456, lagch, inWindow = NULL)
@@ -610,10 +675,20 @@ for (i in 1:3) {
 dev.off()
 
 # traceplots of beta and eta
+
+png(filename = "Traceplots for Beta and Eta - Major 13456.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 traceplots(SpatioTemporal_Model_major13456, ask = FALSE)
+dev.off()
 
 # autocorrelation plots of beta and eta
+
+png(filename = "Autocorrelation plots of beta and eta - Major 13456.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 parautocorr(SpatioTemporal_Model_major13456, ask = FALSE)
+dev.off()
 
 # a summary table of beta and eta
 parsum <- parsummary(SpatioTemporal_Model_major13456)
@@ -627,7 +702,6 @@ latextable(parsum, rownames = rownames(parsum), colnames = c("Parameter", colnam
 
 tt <- seq(1,17, length=1000)
 DataF <- cbind(tt, bs(tt))
-#yy <- area(BTShapeF) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 yy <- sum((polyolay$gridobj$cellarea) * (polyolay$gridobj$cellInside)) * exp(sum(Pop.offset[[1]]$Zm)) * exp(log(parsum[4,1])+log(parsum[5,1])*DataF[,2] + log(parsum[6,1])*DataF[,3] + log(parsum[7,1])*DataF[,4])
 plotDf <- data.frame(t=tt,Y=yy)
 plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_light() + xlab("Month of the Year (March 2015 = 1)") + ylab("number of typhoid cases per month") + geom_point(data=ltDF,mapping=aes(x=tmu,y=lt),size=2)
@@ -636,10 +710,20 @@ plotDf %>% ggplot(mapping=aes(x=t,y=Y)) + geom_line(col="orange",lwd=2) + theme_
 textsummary(SpatioTemporal_Model_major13456, digits = 4)
 
 # a plot of the prior and posterior densities
+
+png(filename = "Prior and posterior density plots - Major 13456.png", width = 5, height = 4, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(3,3))
 priorpost(SpatioTemporal_Model_major13456, ask = FALSE)
+dev.off()
 
 # the posterior covariance function
+
+png(filename = "Posterior Covariance Function - Major 13456.png", width = 7, height = 3, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,1.1))
+par(mfrow=c(1,2))
 postcov(SpatioTemporal_Model_major13456, ask = FALSE)
+dev.off()
 
 # exceedance and lower-tail exceedance probabilities
 
@@ -658,6 +742,11 @@ dev.off()
 kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
 plot(kin)
 
+png(filename = "Inhomogeneous K Function - Major 13456.png", width = 6, height = 4, units = "in", res = 1800)
+kin <-KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
+plot(kin)
+dev.off()
+
 # Extracting mean and variance of the latent field
 meanfield(SpatioTemporal_Model_major13456)
 varfield(SpatioTemporal_Model_major13456)
@@ -665,42 +754,51 @@ varfield(SpatioTemporal_Model_major13456)
 # relative risk (mean of exp{Y}) and standard error of the relative risk
 rr(SpatioTemporal_Model_major13456)
 serr(SpatioTemporal_Model_major13456)
-#intens(SpatioTemporal_Model_All_Cases) # estimated cell-wise mean Poisson intensity
 
 ##################################################################
 # MULTI-TYPE SPATIAL MODEL
 ##################################################################
 
-setwd("~/Don/MSc in Biostatistics/Reading Materials/THESIS/Spatio-Temporal Modelling/Books - Spatio-Temporal Data Analysis")
+setwd("~/Spatio-Temporal Modeling")
 rm(list = ls())
 
 load("Multitype_Spatial_Model_output.RData")
 
-# MODEL DIAGNOSTIC CHECKS by plotting the log target to check if the chain has converged to a posterior mode
+# Relative risk
 
 png(filename = "Relative Risk - Multi-type.png", width = 6, height = 1.5, units = "in", res = 1800)
 par(mar=c(4.1,4.1,1.1,1.1))
 par(mfrow=c(1,3))
-plot(Multitype_Spatial_Model, xlab = "Eastings", ylab = "Northings")
+plot(Multitype_Spatial_Model, type = "serr", xlab = "Eastings", ylab = "Northings")
 dev.off()
 dev.off()
+
+# Standard error of the relative risk
+
+png(filename="Standard Error - Multi-type.png", width = 6, height = 1.5, units = "in", res = 1800)
+par(mar=c(2.1,2.1,1.1,4.1))
+par(mfrow = c(1,3))
+plot(Multitype_Spatial_Model, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
+dev.off()
+dev.off()
+
+# Log target
 
 png(filename = "Log Target - Multi-type.png", width = 5, height = 3, units = "in", res = 1800)
 plot(ltar(Multitype_Spatial_Model), type = "s", xlab = "Iteration/18000", ylab = "log target")
 dev.off()
 
-#plot(hvals(SpatioTemporal_Model_01)[2000:5000], type = "l", xlab = "Iteration", ylab = "h")
-
 # compute and plot autocorrelations in the latent field
 
 png(filename = "Autocorrelation in the latent field - Multi-type.png", width = 6, height = 6, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,5.1))
+par(mar=c(4.1,2.1,1.1,5.1))
 par(mfrow=c(3,3))
 for (i in 1:3) {
   Y_i <- autocorrMultitype(Multitype_Spatial_Model, c(1, 5, 15), i, inWindow = NULL)
   plot(Y_i, zlim = c(-1, 1), axes = FALSE, xlab = "", ylab = "", ask = F)
 }
 dev.off()
+
 
 # produce traceplots of beta and eta
 
@@ -734,7 +832,7 @@ priorpost(Multitype_Spatial_Model, ask = FALSE)
 
 # the posterior covariance function
 
-png(filename = "Posterior covariance function - Multi-type.png", width = 6, height = 6, units = "in", res = 1800)
+png(filename = "Posterior covariance function - Multi-type.png", width = 7, height = 5, units = "in", res = 1800)
 par(mar=c(4.1,4.1,1.1,1.1))
 par(mfrow=c(2,2))
 postcov(Multitype_Spatial_Model, ask = FALSE)
@@ -758,34 +856,3 @@ sp <- segProbs(Multitype_Spatial_Model, domprob = 0.8)
 plot(sp, xlab = "", ylab = "")
 dev.off()
 dev.off()
-
-# exceedance and lower-tail exceedance probabilities
-#ep <- exceedProbs(c(1.5, 3))
-#ex <- lgcp:::expectation.lgcpPredict(Multitype_Spatial_Model, ep)
-
-#plotExceed(ex[[1]], "ep", SpatioTemporal_Model_All_Cases, zlim = c(0, 1), asp = 1, axes = FALSE, xlab = "", ylab = "", 
-#           sub = "", ask = FALSE)
-#scalebar(5000, label = "5 km")
-
-# conditional probabilities
-#cp <- condProbs(SpatioTemporal_Model_01)
-
-# segregation probabilities
-#sr <- segProbs(SpatioTemporal_Model_01, domprob = 0.8)
-
-# Inhomogeneous K-Function
-
-#kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
-#kin
-#plot(kin)
-
-# Estimating the spatial correlation parameters (sigma and phi) of the model
-
-#sigma_phi <- spatialparsEst(kin,sigma.range = c(0,12), phi.range = c(0,12), spatial.covmodel == "matern")
-#sigma_phi
-#sigma_phi$sigma
-#sigma_phi$phi
-
-#Estimating temporal correlation parameter theta
-
-#theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
