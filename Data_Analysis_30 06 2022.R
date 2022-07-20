@@ -764,24 +764,6 @@ rm(list = ls())
 
 load("Multitype_Spatial_Model_output.RData")
 
-# Relative risk
-
-png(filename = "Relative Risk - Multi-type.png", width = 6, height = 1.5, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,1.1))
-par(mfrow=c(1,3))
-plot(Multitype_Spatial_Model, type = "serr", xlab = "Eastings", ylab = "Northings")
-dev.off()
-dev.off()
-
-# Standard error of the relative risk
-
-png(filename="Standard Error - Multi-type.png", width = 6, height = 1.5, units = "in", res = 1800)
-par(mar=c(2.1,2.1,1.1,4.1))
-par(mfrow = c(1,3))
-plot(Multitype_Spatial_Model, type = "serr" ) # plotting standard error of the relative risk of the model for every time point
-dev.off()
-dev.off()
-
 # Log target
 
 png(filename = "Log Target - Multi-type.png", width = 5, height = 3, units = "in", res = 1800)
@@ -790,11 +772,11 @@ dev.off()
 
 # compute and plot autocorrelations in the latent field
 
-png(filename = "Autocorrelation in the latent field - Multi-type.png", width = 6, height = 6, units = "in", res = 1800)
+png(filename = "Autocorrelation in the latent field - Multi-type.png", width = 6, height = 5, units = "in", res = 1800)
 par(mar=c(4.1,2.1,1.1,5.1))
 par(mfrow=c(3,3))
 for (i in 1:3) {
-  Y_i <- autocorrMultitype(Multitype_Spatial_Model, c(1, 5, 15), i, inWindow = NULL)
+  Y_i <- autocorrMultitype(Multitype_Spatial_Model, c(1, 5, 10), i, inWindow = NULL)
   plot(Y_i, zlim = c(-1, 1), axes = FALSE, xlab = "", ylab = "", ask = F)
 }
 dev.off()
