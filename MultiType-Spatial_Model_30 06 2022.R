@@ -220,29 +220,16 @@ Multitype_Spatial_Model <- lgcpPredictMultitypeSpatialPlusPars(formulaList = for
  ##################################################################
  # LOADING THE FITTED MODEL INSTEAD OF RUNNING THE MCMC AGAIN
  ##################################################################
- 
-# MODEL DIAGNOSTIC CHECKS by plotting the log target to check if the chain has converged to a posterior mode
 
-png(filename = "Relative Risk - Multi-type.png", width = 6, height = 1.5, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,1.1))
-par(mfrow=c(1,3))
-plot(Multitype_Spatial_Model, xlab = "Eastings", ylab = "Northings")
-dev.off()
-dev.off()
+setwd("~/Spatio-Temporal Modeling")
+rm(list = ls())
+
+load("Multitype_Spatial_Model_output.RData")
+
+# Log target
 
 png(filename = "Log Target - Multi-type.png", width = 5, height = 3, units = "in", res = 1800)
 plot(ltar(Multitype_Spatial_Model), type = "s", xlab = "Iteration/900", ylab = "log target")
-dev.off()
-
-# compute and plot autocorrelations in the latent field
-
-png(filename = "Autocorrelation in the latent field - Multi-type.png", width = 6, height = 4, units = "in", res = 1800)
-par(mar=c(4.1,4.1,1.1,5.1))
-par(mfrow=c(3,3))
-for (i in 1:3) {
-  Y_i <- autocorrMultitype(Multitype_Spatial_Model, c(1, 5, 15), i, inWindow = NULL)
-  plot(Y_i, zlim = c(-1, 1), axes = FALSE, xlab = "", ylab = "", ask = F)
-}
 dev.off()
 
 # produce traceplots of beta and eta
@@ -251,6 +238,17 @@ png(filename = "Traceplot - Multi-type.png", width = 6, height = 6, units = "in"
 par(mar=c(4.1,4.1,1.1,1.1))
 par(mfrow=c(4,3))
 traceplots(Multitype_Spatial_Model, ask = FALSE)
+dev.off()
+
+# compute and plot autocorrelations in the latent field
+
+png(filename = "Autocorrelation in the latent field - Multi-type.png", width = 6, height = 5, units = "in", res = 1800)
+par(mar=c(4.1,4.1,1.1,5.1))
+par(mfrow=c(3,3))
+for (i in 1:3) {
+  Y_i <- autocorrMultitype(Multitype_Spatial_Model, c(1, 5, 10), i, inWindow = NULL)
+  plot(Y_i, zlim = c(-1, 1), axes = FALSE, xlab = "", ylab = "", ask = F)
+}
 dev.off()
 
 # produce autocorrelation plots of beta and eta
@@ -301,35 +299,3 @@ sp <- segProbs(Multitype_Spatial_Model, domprob = 0.8)
 plot(sp, xlab = "", ylab = "")
 dev.off()
 dev.off()
-
-# exceedance and lower-tail exceedance probabilities
-#ep <- exceedProbs(c(1.5, 3))
-#ex <- lgcp:::expectation.lgcpPredict(Multitype_Spatial_Model, ep)
-
-#plotExceed(ex[[1]], "ep", SpatioTemporal_Model_All_Cases, zlim = c(0, 1), asp = 1, axes = FALSE, xlab = "", ylab = "", 
-#           sub = "", ask = FALSE)
-#scalebar(5000, label = "5 km")
-
- # conditional probabilities
-#cp <- condProbs(SpatioTemporal_Model_01)
-
-# segregation probabilities
-#sr <- segProbs(SpatioTemporal_Model_01, domprob = 0.8)
-
-# Inhomogeneous K-Function
-
-#kin <- KinhomAverage(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, time.window = xyt$tlim, rvals = NULL, correction = "iso", suppresswarnings = F) # using the inhomogeneous K function
-#kin
-#plot(kin)
-
-# Estimating the spatial correlation parameters (sigma and phi) of the model
-
-#sigma_phi <- spatialparsEst(kin,sigma.range = c(0,12), phi.range = c(0,12), spatial.covmodel == "matern")
-#sigma_phi
-#sigma_phi$sigma
-#sigma_phi$phi
-
-#Estimating temporal correlation parameter theta
-
-#theta <- thetaEst(xyt, spatial.intensity = Spatrisk, temporal.intensity = mu_t, sigma = 2, phi = 3) # the values for sigma and phi are not estimates...just supplied for now because sigma_phi above is giving an error
-
