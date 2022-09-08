@@ -153,7 +153,6 @@ mVarSum[mVarSum$variable=="sample_collected",-c(1:2)]<-calcSumStat(Merg,"sample_
 mVarSum[mVarSum$variable=="hh_LAT",-c(1:2)]<-calcSumStat(Merg,var="hh_LAT")
 mVarSum[mVarSum$variable=="hh_LNG",-c(1:2)]<-calcSumStat(Merg,var="hh_LNG")
 
-# explain the code below
 mVarSum[is.element(el=mVarSum$variable,set=c("Lineage",rep("",6))),-1]<-calcSumStat(Merg,var="Lineage",lvls=sort(levels(factor(Merg$Lineage))))
 
 # reformatting for printing the table
